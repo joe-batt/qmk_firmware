@@ -11,22 +11,36 @@
 #define _FAUDIO 3
 #define _RGBMOUSE 4
 
+enum {
+    TD_COPY_PASTE,
+};
+
+qk_tap_dance_action_t tap_dance_actions[] = {
+    [TD_COPY_PASTE] = ACTION_TAP_DANCE_DOUBLE(LCTL(KC_INS), LSFT(KC_INS)),
+};
+
+
 /*#define L4_HOME LT(4, KC_HOME)*/
 /*#define L4_PGDN LT(4, KC_PGDN)*/
 #define L3_RBRC LT(3, KC_RBRC)
 #define L2_ENT LT(2, KC_ENT)
 #define SF_GUI LSFT(KC_LGUI)
+#define SFT_SPC RSFT_T(KC_SPC)
+#define SFT_BSP LSFT_T(KC_BSPC)
+#define CPS_DEL LSFT_T(KC_BSPC)
+#define KT_COPA TD(TD_COPY_PASTE)
 
-/*const uint16_t PROGMEM f12_combo[] = {KC_Y, KC_U, COMBO_END};*/
-/*combo_t key_combos[COMBO_COUNT] = {*/
-    /*COMBO(f12_combo, KC_F12),*/
-/*};*/
+const uint16_t PROGMEM f12_combo[] = {KC_Y, KC_U, COMBO_END};
+const uint16_t PROGMEM alt_f4_combo[] = {KC_R, KC_T, COMBO_END};
+combo_t key_combos[COMBO_COUNT] = {
+    COMBO(f12_combo, KC_F12),
+};
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     switch (keycode) {
 
     case KC_DEL:
-        if (get_mods() & MOD_MASK_SHIFT) {
+        if ((get_mods() & MOD_MASK_SHIFT) || (get_mods() & MOD_MASK_CTRL)) {
             if (record->event.pressed) {
                 register_code(KC_INS);
             } else {
@@ -34,7 +48,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             }
             return false;
         }
-        return true;
+
     }
     return true;
 };
@@ -47,11 +61,11 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         //├────────┼────────┼────────┼────────┼────────┼────────┼────────┐                         ┌────────┼────────┼────────┼────────┼────────┼────────┼────────┤
            KC_TAB  ,KC_Q    ,KC_W    ,KC_E    ,KC_R    ,KC_T    ,KC_ESC  ,                          KC_PSCR ,KC_Y    ,KC_U    ,KC_I    ,KC_O    ,KC_P    ,KC_EQL  ,
         //├────────┼────────┼────────┼────────┼────────┼────────┼────────┤                         ├────────┼────────┼────────┼────────┼────────┼────────┼────────┤
-           KC_CAPS ,KC_A    ,KC_S    ,KC_D    ,KC_F    ,KC_G    ,KC_NO   ,                          TG(1)   ,KC_H    ,KC_J    ,KC_K    ,KC_L    ,KC_SCLN ,KC_NUHS ,
+           KC_CAPS ,KC_A    ,KC_S    ,KC_D    ,KC_F    ,KC_G    ,KT_COPA  ,                          TG(1)   ,KC_H    ,KC_J    ,KC_K    ,KC_L    ,KC_SCLN ,KC_NUHS ,
         //├────────┼────────┼────────┼────────┼────────┼────────┼────────┼────────┐       ┌────────┼────────┼────────┼────────┼────────┼────────┼────────┼────────┤
-           KC_LSFT ,KC_Z    ,KC_X    ,KC_C    ,KC_V    ,KC_B    ,MO(4) ,KC_NO  ,         KC_NO   ,MO(4) ,KC_N    ,KC_M    ,KC_LBRC ,KC_QUOT ,KC_SLSH ,KC_RSFT ,
+           KC_LSFT ,KC_Z    ,KC_X    ,KC_C    ,KC_V    ,KC_B    ,MO(4) ,LT(0,KC_NO)  ,         KC_NO   ,MO(4) ,KC_N    ,KC_M    ,KC_LBRC ,KC_QUOT ,KC_SLSH ,KC_RSFT ,
         //├────────┼────────┼────────┼────────┼────┬───┴────┬───┼────────┼────────┤       ├────────┼────────┼───┬────┴───┬────┼────────┼────────┼────────┼────────┤
-           MO(3)   ,KC_NUBS ,KC_LALT ,KC_LGUI ,     KC_LCTL ,    KC_BSPC ,KC_DEL  ,        KC_ENT  ,KC_SPC ,    MO(1)   ,     KC_COMM ,KC_DOT  ,KC_RALT ,L3_RBRC
+           MO(3)   ,KC_NUBS ,KC_LALT ,KC_LGUI ,     KC_LCTL ,    SFT_BSP ,KC_DEL  ,        KC_ENT  ,SFT_SPC ,    MO(1)   ,     KC_COMM ,KC_DOT  ,KC_RALT ,L3_RBRC
         //└────────┴────────┴────────┴────────┘    └────────┘   └────────┴────────┘       └────────┴────────┘   └────────┘    └────────┴────────┴────────┴────────┘
            ),
     [_GAME] = LAYOUT(
