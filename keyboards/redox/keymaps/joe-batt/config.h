@@ -41,7 +41,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define RGBLIGHT_SAT_STEP 8
 #define RGBLIGHT_VAL_STEP 8
 #define RGBLIGHT_LAYERS
-#define COMBO_COUNT 1
+#define COMBO_COUNT 5
 #define IGNORE_MOD_TAP_INTERRUPT
 #define RETRO_TAPPING
 #define NKRO_ENABLE
+#define TAPPING_TOGGLE 3
