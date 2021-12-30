@@ -13,12 +13,17 @@
 
 enum {
     TD_COPY_PASTE,
+    TD_SHIFT_GUI,
 };
 
 qk_tap_dance_action_t tap_dance_actions[] = {
     [TD_COPY_PASTE] = ACTION_TAP_DANCE_DOUBLE(LCTL(KC_INS), LSFT(KC_INS)),
 };
 
+enum custom_keycodes {
+  CPS_DEL = SAFE_RANGE,
+  CPS_ENT
+};
 
 /*#define L4_HOME LT(4, KC_HOME)*/
 /*#define L4_PGDN LT(4, KC_PGDN)*/
@@ -27,27 +32,60 @@ qk_tap_dance_action_t tap_dance_actions[] = {
 #define SF_GUI LSFT(KC_LGUI)
 #define SFT_SPC RSFT_T(KC_SPC)
 #define SFT_BSP LSFT_T(KC_BSPC)
-#define CPS_DEL LSFT_T(KC_BSPC)
 #define KT_COPA TD(TD_COPY_PASTE)
+#define L4_COMM LT(4, KC_COMM)
+#define CTL_TAB LCTL_T(KC_TAB)
 
 const uint16_t PROGMEM f12_combo[] = {KC_Y, KC_U, COMBO_END};
-const uint16_t PROGMEM alt_f4_combo[] = {KC_R, KC_T, COMBO_END};
+const uint16_t PROGMEM sft_ins_combo[] = {KC_4, KC_5, COMBO_END};
+const uint16_t PROGMEM alt_f4_combo[] = {KC_E, KC_R, KC_T, COMBO_END};
+const uint16_t PROGMEM ctrl_c_combo[] = {KC_1, KC_2, COMBO_END};
+const uint16_t PROGMEM sctl_c_combo[] = {KC_1, KC_2, KC_3, COMBO_END};
 combo_t key_combos[COMBO_COUNT] = {
     COMBO(f12_combo, KC_F12),
+    COMBO(sft_ins_combo, LSFT(KC_INS)),
+    COMBO(alt_f4_combo, LSG(KC_Q)),
+    COMBO(ctrl_c_combo, LCTL(KC_R)),
+    COMBO(sctl_c_combo, LCTL(LSFT(KC_R))),
 };
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+     static uint16_t my_hash_timer;
     switch (keycode) {
 
     case KC_DEL:
-        if ((get_mods() & MOD_MASK_SHIFT) || (get_mods() & MOD_MASK_CTRL)) {
+        if ( ((get_mods() & MOD_MASK_SHIFT) || (get_mods() & MOD_MASK_CTRL)) && !(get_mods() & MOD_MASK_ALT)) {
             if (record->event.pressed) {
                 register_code(KC_INS);
             } else {
                 unregister_code(KC_INS);
             }
-            return false;
         }
+        return false;
+//TODO use tap dance advanced like four function td https://web.archive.org/web/20210906183733/https://beta.docs.qmk.fm/using-qmk/software-features/feature_tap_dance
+    case CPS_DEL:
+        if(record->event.pressed) {
+        my_hash_timer = timer_read();
+            register_code(KC_CAPS); // Change the key to be held here
+          } else {
+            unregister_code(KC_CAPS); // Change the key that was held here, too!
+            if (timer_elapsed(my_hash_timer) < TAPPING_TERM) {
+              SEND_STRING(SS_TAP(X_DEL)); // Change the character(s) to be sent on tap here
+            }
+      }
+      return false;
+    
+    case CPS_ENT:
+        if(record->event.pressed) {
+        my_hash_timer = timer_read();
+            register_code(KC_CAPS); // Change the key to be held here
+          } else {
+            unregister_code(KC_CAPS); // Change the key that was held here, too!
+            if (timer_elapsed(my_hash_timer) < TAPPING_TERM) {
+              SEND_STRING(SS_TAP(X_ENT)); // Change the character(s) to be sent on tap here
+            }
+      }
+      return false;
 
     }
     return true;
@@ -61,11 +99,11 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         //├────────┼────────┼────────┼────────┼────────┼────────┼────────┐                         ┌────────┼────────┼────────┼────────┼────────┼────────┼────────┤
            KC_TAB  ,KC_Q    ,KC_W    ,KC_E    ,KC_R    ,KC_T    ,KC_ESC  ,                          KC_PSCR ,KC_Y    ,KC_U    ,KC_I    ,KC_O    ,KC_P    ,KC_EQL  ,
         //├────────┼────────┼────────┼────────┼────────┼────────┼────────┤                         ├────────┼────────┼────────┼────────┼────────┼────────┼────────┤
-           KC_CAPS ,KC_A    ,KC_S    ,KC_D    ,KC_F    ,KC_G    ,KT_COPA  ,                          TG(1)   ,KC_H    ,KC_J    ,KC_K    ,KC_L    ,KC_SCLN ,KC_NUHS ,
+           KC_CAPS ,KC_A    ,KC_S    ,KC_D    ,KC_F    ,KC_G    ,KC_NO   ,                          KC_NO   ,KC_H    ,KC_J    ,KC_K    ,KC_L    ,KC_SCLN ,KC_NUHS ,
         //├────────┼────────┼────────┼────────┼────────┼────────┼────────┼────────┐       ┌────────┼────────┼────────┼────────┼────────┼────────┼────────┼────────┤
-           KC_LSFT ,KC_Z    ,KC_X    ,KC_C    ,KC_V    ,KC_B    ,MO(4) ,LT(0,KC_NO)  ,         KC_NO   ,MO(4) ,KC_N    ,KC_M    ,KC_LBRC ,KC_QUOT ,KC_SLSH ,KC_RSFT ,
+           KC_LSFT ,KC_Z    ,KC_X    ,KC_C    ,KC_V    ,KC_B    ,KC_CAPS ,KC_NO   ,        KC_NO   ,KC_NUHS ,KC_N    ,KC_M    ,KC_LBRC ,KC_QUOT ,KC_SLSH ,KC_RSFT ,
         //├────────┼────────┼────────┼────────┼────┬───┴────┬───┼────────┼────────┤       ├────────┼────────┼───┬────┴───┬────┼────────┼────────┼────────┼────────┤
-           MO(3)   ,KC_NUBS ,KC_LALT ,KC_LGUI ,     KC_LCTL ,    SFT_BSP ,KC_DEL  ,        KC_ENT  ,SFT_SPC ,    MO(1)   ,     KC_COMM ,KC_DOT  ,KC_RALT ,L3_RBRC
+           MO(3)   ,KC_NUBS ,KC_LALT ,KC_LGUI ,     CTL_TAB ,    SFT_BSP ,CPS_DEL  ,        CPS_ENT  ,SFT_SPC ,    TT(1)   ,     L4_COMM ,KC_DOT  ,KC_RALT ,L3_RBRC
         //└────────┴────────┴────────┴────────┘    └────────┘   └────────┴────────┘       └────────┴────────┘   └────────┘    └────────┴────────┴────────┴────────┘
            ),
     [_GAME] = LAYOUT(
@@ -78,29 +116,48 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         //├────────┼────────┼────────┼────────┼────────┼────────┼────────┼────────┐       ┌────────┼────────┼────────┼────────┼────────┼────────┼────────┼────────┤
            KC_TRNS ,KC_TRNS ,KC_TRNS ,KC_TRNS ,KC_TRNS ,KC_TRNS ,KC_TRNS ,KC_TRNS ,        KC_TRNS ,KC_NO   ,KC_NO   ,KC_NO   ,KC_NO   ,KC_NO   ,KC_NO   ,KC_TRNS ,
         //├────────┼────────┼────────┼────────┼────┬───┴────┬───┼────────┼────────┤       ├────────┼────────┼───┬────┴───┬────┼────────┼────────┼────────┼────────┤
-           KC_TRNS ,KC_TRNS ,KC_TRNS ,KC_TRNS ,     KC_TRNS ,    KC_SPC  ,L2_ENT  ,        KC_TRNS ,KC_TRNS ,    KC_TRNS ,     KC_NO   ,KC_NO   ,KC_NO   ,KC_TRNS
+           KC_TRNS ,KC_TRNS ,KC_TRNS ,KC_TRNS ,     KC_LCTL ,    KC_SPC  ,L2_ENT  ,        KC_TRNS ,KC_TRNS ,    KC_TRNS ,     KC_TRNS ,KC_NO   ,KC_NO   ,KC_TRNS
         //└────────┴────────┴────────┴────────┘    └────────┘   └────────┴────────┘       └────────┴────────┘   └────────┘    └────────┴────────┴────────┴────────┘
            ),
 	[_FLIP] = LAYOUT(
         //┌────────┬────────┬────────┬────────┬────────┬────────┐                                           ┌────────┬────────┬────────┬────────┬────────┬────────┐
            KC_NO   ,KC_6    ,KC_7    ,KC_8    ,KC_9    ,KC_0    ,                                            KC_NO   ,KC_NO   ,KC_NO   ,KC_NO   ,KC_NO   ,KC_NO   , 
         //├────────┼────────┼────────┼────────┼────────┼────────┼────────┐                         ┌────────┼────────┼────────┼────────┼────────┼────────┼────────┤
-            KC_NO, KC_Y, KC_U, KC_I, KC_O, KC_P, KC_NO,      KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO,
+           KC_NO   ,KC_Y    ,KC_U    ,KC_I    ,KC_O    ,KC_P    ,KC_NO   ,                          KC_NO   ,KC_NO   ,KC_NO   ,KC_NO   ,KC_NO   ,KC_NO   ,KC_NO   ,
         //├────────┼────────┼────────┼────────┼────────┼────────┼────────┐                         ┌────────┼────────┼────────┼────────┼────────┼────────┼────────┤
-            KC_NO, KC_H, KC_J, KC_K, KC_L, KC_SCLN, KC_F9,   KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, 
+           KC_NO   ,KC_H    ,KC_J    ,KC_K    ,KC_L    ,KC_SCLN ,KC_F9   ,                          KC_NO   ,KC_NO   ,KC_NO   ,KC_NO   ,KC_NO   ,KC_NO   ,KC_NO   , 
         //├────────┼────────┼────────┼────────┼────────┼────────┼────────┼────────┐       ┌────────┼────────┼────────┼────────┼────────┼────────┼────────┼────────┤
-            KC_LSFT, KC_N,   KC_M,   KC_COMM,  KC_DOT,  KC_SLSH,  KC_TRNS, KC_NO,         KC_NO, KC_TRNS, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, 
+           KC_LSFT ,KC_N    ,KC_M    ,KC_LBRC ,KC_QUOT ,KC_SLSH ,KC_TRNS ,KC_NO   ,        KC_NO   ,KC_TRNS ,KC_NO   ,KC_NO   ,KC_NO   ,KC_NO   ,KC_NO   ,KC_NO   , 
         //├────────┼────────┼────────┼────────┼────┬───┴────┬───┼────────┼────────┤       ├────────┼────────┼───┬────┴───┬────┼────────┼────────┼────────┼────────┤
-            KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_NO, KC_NO,      KC_TRNS, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_TRNS
+           KC_TRNS ,KC_TRNS ,KC_COMM ,KC_DOT  ,     KC_NO   ,    KC_NO   ,KC_TRNS ,        KC_NO   ,KC_NO   ,    KC_NO   ,     KC_TRNS ,KC_NO   ,KC_NO   , KC_TRNS
         //└────────┴────────┴────────┴────────┘    └────────┘   └────────┴────────┘       └────────┴────────┘   └────────┘    └────────┴────────┴────────┴────────┘
             ),
 	[_FAUDIO] = LAYOUT(
-            RESET, KC_NO, KC_F10, KC_F11, KC_F12, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, RESET, 
-            KC_NO, KC_NO, KC_F7, KC_F8, KC_F9, KC_NO, NK_ON, KC_VOLU, KC_NO, KC_MRWD, KC_MFFD, KC_NO, KC_NO, KC_NO, 
-            SF_GUI, KC_NO, KC_F4, KC_F5, KC_F6, KC_NO, NK_OFF, KC_VOLD, KC_NO, KC_MPLY, KC_MSTP, KC_MUTE, KC_NO, KC_NO, 
-            KC_TRNS, KC_NO, KC_F1, KC_F2, KC_F3, KC_NO, KC_TRNS, KC_NO, KC_NO, KC_TRNS, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, 
-            KC_TRNS, KC_TRNS, KC_TRNS, KC_RGUI, KC_RCTL, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_TRNS, KC_NO, KC_NO, KC_NO),
-    [_RGBMOUSE] = LAYOUT(RGB_SAI, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_ACL0, KC_ACL1, KC_ACL2, KC_NO, KC_NO, RGB_SAD, RGB_M_X, RGB_M_K, RGB_M_R, RGB_M_SW, RGB_TOG, RGB_VAI, KC_NO, KC_NO, KC_WH_L, KC_MS_U, KC_WH_R, KC_NO, KC_NO, RGB_HUI, RGB_M_B, RGB_M_G, RGB_M_P, RGB_SPD, RGB_SPI, RGB_VAD, KC_NO, KC_NO, KC_MS_L, KC_MS_D, KC_MS_R, KC_NO, KC_NO, RGB_HUD, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_BTN3, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_TRNS, KC_NO, KC_NO, KC_TRNS, KC_NO, KC_NO, KC_NO, KC_BTN2, KC_BTN1, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO)
+        //┌────────┬────────┬────────┬────────┬────────┬────────┐                                           ┌────────┬────────┬────────┬────────┬────────┬────────┐
+           RESET   ,KC_NO   ,KC_F10  ,KC_F11  ,KC_F12  ,KC_NO   ,                                            KC_NO   ,KC_NO   ,KC_NO   ,KC_NO   ,KC_NO   ,RESET   , 
+        //├────────┼────────┼────────┼────────┼────────┼────────┼────────┐                         ┌────────┼────────┼────────┼────────┼────────┼────────┼────────┤
+           KC_NO   ,KC_NO   ,KC_F7   ,KC_F8   ,KC_F9   ,KC_NO   ,NK_ON   ,                          KC_VOLU ,KC_NO   ,KC_MRWD ,KC_MFFD ,KC_NO   ,KC_NO   ,KC_NO   , 
+        //├────────┼────────┼────────┼────────┼────────┼────────┼────────┐                         ┌────────┼────────┼────────┼────────┼────────┼────────┼────────┤
+           SF_GUI  ,KC_NO   ,KC_F4   ,KC_F5   ,KC_F6   ,KC_NO   ,NK_OFF  ,                          KC_VOLD ,KC_NO   ,KC_MPLY ,KC_MSTP ,KC_MUTE ,KC_NO   ,KC_NO   , 
+        //├────────┼────────┼────────┼────────┼────────┼────────┼────────┼────────┐       ┌────────┼────────┼────────┼────────┼────────┼────────┼────────┼────────┤
+           KC_TRNS ,KC_NO   ,KC_F1   ,KC_F2   ,KC_F3   ,KC_NO   ,KC_TRNS ,KC_NO   ,        KC_NO   ,KC_TRNS ,KC_NO   ,KC_NO   ,KC_NO   ,KC_NO   ,KC_NO   ,KC_NO   , 
+        //├────────┼────────┼────────┼────────┼────┬───┴────┬───┼────────┼────────┤       ├────────┼────────┼───┬────┴───┬────┼────────┼────────┼────────┼────────┤
+           KC_TRNS ,KC_TRNS ,KC_TRNS ,KC_RGUI ,     KC_RCTL ,    KC_NO   ,KC_DEL   ,        KC_NO   ,KC_NO   ,    KC_NO   ,     KC_TRNS ,KC_NO   ,KC_NO   ,KC_TRNS
+        //└────────┴────────┴────────┴────────┘    └────────┘   └────────┴────────┘       └────────┴────────┘   └────────┘    └────────┴────────┴────────┴────────┘
+           ),
+    [_RGBMOUSE] = LAYOUT(
+        //┌────────┬────────┬────────┬────────┬────────┬────────┐                                           ┌────────┬────────┬────────┬────────┬────────┬────────┐
+           RGB_SAI ,KC_NO   ,KC_NO   ,KC_NO   ,KC_NO   ,KC_NO   ,                                            KC_NO   ,KC_ACL0 ,KC_ACL1 ,KC_ACL2 ,KC_NO   ,KC_NO   ,
+        //├────────┼────────┼────────┼────────┼────────┼────────┼────────┐                         ┌────────┼────────┼────────┼────────┼────────┼────────┼────────┤
+           RGB_SAD ,RGB_M_X ,RGB_M_K ,RGB_M_R ,RGB_M_SW,RGB_TOG ,RGB_VAI ,                          KC_NO   ,KC_NO   ,KC_WH_L ,KC_MS_U ,KC_WH_R ,KC_NO   ,KC_NO   ,
+        //├────────┼────────┼────────┼────────┼────────┼────────┼────────┐                         ┌────────┼────────┼────────┼────────┼────────┼────────┼────────┤
+           RGB_HUI ,RGB_M_B ,RGB_M_G ,RGB_M_P ,RGB_SPD ,RGB_SPI ,RGB_VAD ,                          KC_NO   ,KC_NO   ,KC_MS_L ,KC_MS_D ,KC_MS_R ,KC_NO   ,KC_NO   ,
+        //├────────┼────────┼────────┼────────┼────────┼────────┼────────┼────────┐       ┌────────┼────────┼────────┼────────┼────────┼────────┼────────┼────────┤
+           RGB_HUD ,KC_NO   ,KC_NO   ,KC_NO   ,KC_NO   ,KC_NO   ,KC_NO   ,KC_NO   ,        KC_BTN3 ,KC_NO   ,KC_NO   ,KC_NO   ,KC_NO   ,KC_NO   ,KC_NO   ,KC_NO   ,
+        //├────────┼────────┼────────┼────────┼────┬───┴────┬───┼────────┼────────┤       ├────────┼────────┼───┬────┴───┬────┼────────┼────────┼────────┼────────┤
+           KC_TRNS ,KC_NO   ,KC_NO   ,KC_TRNS ,     KC_NO   ,    KC_NO   ,KC_NO   ,        KC_BTN2 ,KC_BTN1 ,    KC_NO   ,     KC_TRNS ,KC_NO   ,KC_NO   ,KC_NO
+        //└────────┴────────┴────────┴────────┘    └────────┘   └────────┴────────┘       └────────┴────────┘   └────────┘    └────────┴────────┴────────┴────────┘
+           )
 };
 
 const rgblight_segment_t PROGMEM my_capslock_layer[] = RGBLIGHT_LAYER_SEGMENTS(
