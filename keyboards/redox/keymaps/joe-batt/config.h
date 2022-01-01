@@ -43,6 +43,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define RGBLIGHT_LAYERS
 #define COMBO_COUNT 5
 #define IGNORE_MOD_TAP_INTERRUPT
-#define RETRO_TAPPING
+//#define RETRO_TAPPING
+//#define RETRO_TAPPING_PER_KEY
 #define NKRO_ENABLE
 #define TAPPING_TOGGLE 3
+#define TAPPING_TERM 200
