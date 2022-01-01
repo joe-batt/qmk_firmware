@@ -11,19 +11,38 @@
 #define _FAUDIO 3
 #define _RGBMOUSE 4
 
+typedef enum {
+    TD_NONE,
+    TD_UNKNOWN,
+    TD_SINGLE_TAP,
+    TD_SINGLE_HOLD,
+    TD_DOUBLE_TAP,
+    TD_DOUBLE_HOLD,
+    TD_DOUBLE_SINGLE_TAP, // Send two single taps
+    TD_TRIPLE_TAP,
+    TD_TRIPLE_HOLD
+} td_state_t;
+
+typedef struct {
+    bool is_press_action;
+    td_state_t state;
+} td_tap_t;
+
+// Tap dance enums
 enum {
-    TD_COPY_PASTE,
-    TD_SHIFT_GUI,
+    TD_CAPS_ENT,
+    TD_CAPS_DEL
 };
 
-qk_tap_dance_action_t tap_dance_actions[] = {
-    [TD_COPY_PASTE] = ACTION_TAP_DANCE_DOUBLE(LCTL(KC_INS), LSFT(KC_INS)),
-};
+td_state_t cur_dance(qk_tap_dance_state_t *state);
+void custom_mod_tap(qk_tap_dance_state_t *state, uint16_t keycode);
 
-enum custom_keycodes {
-  CPS_DEL = SAFE_RANGE,
-  CPS_ENT
-};
+// For the x tap dance. Put it here so it can be used in any keymap
+void x_finished(qk_tap_dance_state_t *state, void *user_data);
+void x_reset(qk_tap_dance_state_t *state, void *user_data);
+void y_finished(qk_tap_dance_state_t *state, void *user_data);
+void y_reset(qk_tap_dance_state_t *state, void *user_data);
+
 
 /*#define L4_HOME LT(4, KC_HOME)*/
 /*#define L4_PGDN LT(4, KC_PGDN)*/
@@ -35,6 +54,8 @@ enum custom_keycodes {
 #define KT_COPA TD(TD_COPY_PASTE)
 #define L4_COMM LT(4, KC_COMM)
 #define CTL_TAB LCTL_T(KC_TAB)
+#define CPS_DEL TD(TD_CAPS_DEL)
+#define CPS_ENT TD(TD_CAPS_ENT)
 
 const uint16_t PROGMEM f12_combo[] = {KC_Y, KC_U, COMBO_END};
 const uint16_t PROGMEM sft_ins_combo[] = {KC_4, KC_5, COMBO_END};
@@ -50,7 +71,6 @@ combo_t key_combos[COMBO_COUNT] = {
 };
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
-     static uint16_t my_hash_timer;
     switch (keycode) {
 
     case KC_DEL:
@@ -62,30 +82,6 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             }
         }
         return false;
-//TODO use tap dance advanced like four function td https://web.archive.org/web/20210906183733/https://beta.docs.qmk.fm/using-qmk/software-features/feature_tap_dance
-    case CPS_DEL:
-        if(record->event.pressed) {
-        my_hash_timer = timer_read();
-            register_code(KC_CAPS); // Change the key to be held here
-          } else {
-            unregister_code(KC_CAPS); // Change the key that was held here, too!
-            if (timer_elapsed(my_hash_timer) < TAPPING_TERM) {
-              SEND_STRING(SS_TAP(X_DEL)); // Change the character(s) to be sent on tap here
-            }
-      }
-      return false;
-    
-    case CPS_ENT:
-        if(record->event.pressed) {
-        my_hash_timer = timer_read();
-            register_code(KC_CAPS); // Change the key to be held here
-          } else {
-            unregister_code(KC_CAPS); // Change the key that was held here, too!
-            if (timer_elapsed(my_hash_timer) < TAPPING_TERM) {
-              SEND_STRING(SS_TAP(X_ENT)); // Change the character(s) to be sent on tap here
-            }
-      }
-      return false;
 
     }
     return true;
@@ -142,7 +138,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         //├────────┼────────┼────────┼────────┼────────┼────────┼────────┼────────┐       ┌────────┼────────┼────────┼────────┼────────┼────────┼────────┼────────┤
            KC_TRNS ,KC_NO   ,KC_F1   ,KC_F2   ,KC_F3   ,KC_NO   ,KC_TRNS ,KC_NO   ,        KC_NO   ,KC_TRNS ,KC_NO   ,KC_NO   ,KC_NO   ,KC_NO   ,KC_NO   ,KC_NO   , 
         //├────────┼────────┼────────┼────────┼────┬───┴────┬───┼────────┼────────┤       ├────────┼────────┼───┬────┴───┬────┼────────┼────────┼────────┼────────┤
-           KC_TRNS ,KC_TRNS ,KC_TRNS ,KC_RGUI ,     KC_RCTL ,    KC_NO   ,KC_DEL   ,        KC_NO   ,KC_NO   ,    KC_NO   ,     KC_TRNS ,KC_NO   ,KC_NO   ,KC_TRNS
+           KC_TRNS ,KC_TRNS ,KC_TRNS ,KC_RGUI ,     KC_RCTL ,    KC_NO   ,KC_NO   ,        KC_NO   ,KC_NO   ,    KC_NO   ,     KC_TRNS ,KC_NO   ,KC_NO   ,KC_TRNS
         //└────────┴────────┴────────┴────────┘    └────────┘   └────────┴────────┘       └────────┴────────┘   └────────┘    └────────┴────────┴────────┴────────┘
            ),
     [_RGBMOUSE] = LAYOUT(
@@ -207,3 +203,121 @@ layer_state_t layer_state_set_user(layer_state_t state) {
     rgblight_set_layer_state(4, layer_state_cmp(state, _FLIP));    
     return state;
 };
+
+/* Return an integer that corresponds to what kind of tap dance should be executed.
+ *
+ * How to figure out tap dance state: interrupted and pressed.
+ *
+ * Interrupted: If the state of a dance dance is "interrupted", that means that another key has been hit
+ *  under the tapping term. This is typically indicitive that you are trying to "tap" the key.
+ *
+ * Pressed: Whether or not the key is still being pressed. If this value is true, that means the tapping term
+ *  has ended, but the key is still being pressed down. This generally means the key is being "held".
+ *
+ * One thing that is currenlty not possible with qmk software in regards to tap dance is to mimic the "permissive hold"
+ *  feature. In general, advanced tap dances do not work well if they are used with commonly typed letters.
+ *  For example "A". Tap dances are best used on non-letter keys that are not hit while typing letters.
+ *
+ * Good places to put an advanced tap dance:
+ *  z,q,x,j,k,v,b, any function key, home/end, comma, semi-colon
+ *
+ * Criteria for "good placement" of a tap dance key:
+ *  Not a key that is hit frequently in a sentence
+ *  Not a key that is used frequently to double tap, for example 'tab' is often double tapped in a terminal, or
+ *    in a web form. So 'tab' would be a poor choice for a tap dance.
+ *  Letters used in common words as a double. For example 'p' in 'pepper'. If a tap dance function existed on the
+ *    letter 'p', the word 'pepper' would be quite frustating to type.
+ *
+ * For the third point, there does exist the 'TD_DOUBLE_SINGLE_TAP', however this is not fully tested
+ *
+ */
+void custom_mod_tap(qk_tap_dance_state_t *state, uint16_t keycode){ 
+    if (state->count >= 2){
+            tap_code(keycode);
+    }
+}
+
+td_state_t cur_dance(qk_tap_dance_state_t *state) {
+    if (state->count == 1) {
+        if (!state->pressed) return TD_SINGLE_TAP;
+        else return TD_SINGLE_HOLD;
+    } else if (state->count >= 2) {
+        if (state->pressed) return TD_DOUBLE_HOLD;
+        else return TD_DOUBLE_TAP;
+    }
+    return TD_UNKNOWN;
+}
+
+
+// Create an instance of 'td_tap_t' for the 'x' tap dance.
+static td_tap_t deltap_state = {
+    .is_press_action = true,
+    .state = TD_NONE
+};
+
+static td_tap_t enttap_state = {
+    .is_press_action = true,
+    .state = TD_NONE
+};
+
+
+void del_each(qk_tap_dance_state_t *state, void *user_data) {
+    custom_mod_tap(state, KC_DEL);
+}
+
+void ent_each(qk_tap_dance_state_t *state, void *user_data) {
+    custom_mod_tap(state, KC_ENT);
+}
+
+void custom_mod_finished(td_tap_t tap_state, uint16_t modcode, uint16_t keycode){
+    switch (tap_state.state) {
+        case TD_SINGLE_TAP: register_code(keycode); break;
+        case TD_SINGLE_HOLD: register_code(modcode); break;
+        case TD_DOUBLE_TAP: register_code(keycode); break;
+        case TD_DOUBLE_HOLD: register_code(keycode); break;
+        default: break;
+    }
+}
+
+void del_finished(qk_tap_dance_state_t *state, void *user_data) {
+    deltap_state.state = cur_dance(state);
+    custom_mod_finished(deltap_state, KC_CAPS, KC_DEL);
+}
+
+void custom_mod_reset(td_tap_t tap_state, uint16_t modcode, uint16_t keycode){
+    switch (tap_state.state) {
+        case TD_SINGLE_TAP: unregister_code(keycode); break;
+        case TD_SINGLE_HOLD: unregister_code(modcode); break;
+        case TD_DOUBLE_TAP: unregister_code(keycode); break;
+        case TD_DOUBLE_HOLD: unregister_code(keycode);
+        default: break;
+    }
+    tap_state.state = TD_NONE;
+}
+
+void del_reset(qk_tap_dance_state_t *state, void *user_data) {
+    custom_mod_reset(deltap_state, KC_CAPS, KC_DEL);
+}
+
+void ent_finished(qk_tap_dance_state_t *state, void *user_data) {
+    enttap_state.state = cur_dance(state);
+    custom_mod_finished(enttap_state, KC_CAPS, KC_ENT);
+}
+
+void ent_reset(qk_tap_dance_state_t *state, void *user_data) {
+    custom_mod_reset(enttap_state, KC_CAPS, KC_ENT);
+}
+
+qk_tap_dance_action_t tap_dance_actions[] = {
+    [TD_CAPS_DEL] = ACTION_TAP_DANCE_FN_ADVANCED(del_each, del_finished, del_reset),
+    [TD_CAPS_ENT] = ACTION_TAP_DANCE_FN_ADVANCED(ent_each, ent_finished, ent_reset)
+};
+
+/*bool get_retro_tapping(uint16_t keycode, keyrecord_t *record) {*/
+    /*switch (keycode) {*/
+        /*case CTL_TAB:*/
+            /*return false;*/
+        /*default:*/
+            /*return true;*/
+    /*}*/
+/*}*/
