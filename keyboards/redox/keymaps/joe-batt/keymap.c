@@ -31,7 +31,8 @@ typedef struct {
 // Tap dance enums
 enum {
     TD_CAPS_ENT,
-    TD_CAPS_DEL
+    TD_CAPS_DEL,
+    TD_MEDIA
 };
 
 td_state_t cur_dance(qk_tap_dance_state_t *state);
@@ -51,17 +52,17 @@ void y_reset(qk_tap_dance_state_t *state, void *user_data);
 #define SF_GUI LSFT(KC_LGUI)
 #define SFT_SPC RSFT_T(KC_SPC)
 #define SFT_BSP LSFT_T(KC_BSPC)
-#define KT_COPA TD(TD_COPY_PASTE)
 #define L4_COMM LT(4, KC_COMM)
 #define CTL_TAB LCTL_T(KC_TAB)
 #define CPS_DEL TD(TD_CAPS_DEL)
 #define CPS_ENT TD(TD_CAPS_ENT)
+#define TD_MD TD(TD_MEDIA) 
 
 const uint16_t PROGMEM f12_combo[] = {KC_Y, KC_U, COMBO_END};
-const uint16_t PROGMEM sft_ins_combo[] = {KC_4, KC_5, COMBO_END};
+const uint16_t PROGMEM sft_ins_combo[] = {KC_C, KC_V, COMBO_END};
 const uint16_t PROGMEM alt_f4_combo[] = {KC_E, KC_R, KC_T, COMBO_END};
-const uint16_t PROGMEM ctrl_c_combo[] = {KC_1, KC_2, COMBO_END};
-const uint16_t PROGMEM sctl_c_combo[] = {KC_1, KC_2, KC_3, COMBO_END};
+const uint16_t PROGMEM ctrl_c_combo[] = {KC_D, KC_F, COMBO_END};
+const uint16_t PROGMEM sctl_c_combo[] = {KC_S, KC_D, KC_F, COMBO_END};
 combo_t key_combos[COMBO_COUNT] = {
     COMBO(f12_combo, KC_F12),
     COMBO(sft_ins_combo, LSFT(KC_INS)),
@@ -93,20 +94,20 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         //┌────────┬────────┬────────┬────────┬────────┬────────┐                                           ┌────────┬────────┬────────┬────────┬────────┬────────┐
            KC_GRV  ,KC_1    ,KC_2    ,KC_3    ,KC_4    ,KC_5    ,                                            KC_6    ,KC_7    ,KC_8    ,KC_9    ,KC_0    ,KC_MINS ,
         //├────────┼────────┼────────┼────────┼────────┼────────┼────────┐                         ┌────────┼────────┼────────┼────────┼────────┼────────┼────────┤
-           KC_TAB  ,KC_Q    ,KC_W    ,KC_E    ,KC_R    ,KC_T    ,KC_ESC  ,                          KC_PSCR ,KC_Y    ,KC_U    ,KC_I    ,KC_O    ,KC_P    ,KC_EQL  ,
+           KC_TAB  ,KC_Q    ,KC_W    ,KC_E    ,KC_R    ,KC_T    ,KC_ESC  ,                          KC_VOLU ,KC_Y    ,KC_U    ,KC_I    ,KC_O    ,KC_P    ,KC_EQL  ,
         //├────────┼────────┼────────┼────────┼────────┼────────┼────────┤                         ├────────┼────────┼────────┼────────┼────────┼────────┼────────┤
-           KC_CAPS ,KC_A    ,KC_S    ,KC_D    ,KC_F    ,KC_G    ,KC_NO   ,                          KC_NO   ,KC_H    ,KC_J    ,KC_K    ,KC_L    ,KC_SCLN ,KC_NUHS ,
+           KC_CAPS ,KC_A    ,KC_S    ,KC_D    ,KC_F    ,KC_G    ,TD_MD   ,                          KC_VOLD ,KC_H    ,KC_J    ,KC_K    ,KC_L    ,KC_SCLN ,KC_NUHS ,
         //├────────┼────────┼────────┼────────┼────────┼────────┼────────┼────────┐       ┌────────┼────────┼────────┼────────┼────────┼────────┼────────┼────────┤
-           KC_LSFT ,KC_Z    ,KC_X    ,KC_C    ,KC_V    ,KC_B    ,KC_CAPS ,KC_NO   ,        KC_NO   ,KC_NUHS ,KC_N    ,KC_M    ,KC_LBRC ,KC_QUOT ,KC_SLSH ,KC_RSFT ,
+           KC_LSFT ,KC_Z    ,KC_X    ,KC_C    ,KC_V    ,KC_B    ,MO(4)   ,KC_NO   ,        KC_PSCR ,MO(4)   ,KC_N    ,KC_M    ,KC_LBRC ,KC_QUOT ,KC_SLSH ,KC_RSFT ,
         //├────────┼────────┼────────┼────────┼────┬───┴────┬───┼────────┼────────┤       ├────────┼────────┼───┬────┴───┬────┼────────┼────────┼────────┼────────┤
-           MO(3)   ,KC_NUBS ,KC_LALT ,KC_LGUI ,     CTL_TAB ,    SFT_BSP ,CPS_DEL  ,        CPS_ENT  ,SFT_SPC ,    TT(1)   ,     L4_COMM ,KC_DOT  ,KC_RALT ,L3_RBRC
+           MO(3)   ,KC_NUBS ,KC_LALT ,KC_LGUI ,     CTL_TAB ,    SFT_BSP ,CPS_DEL ,        CPS_ENT  ,SFT_SPC,    TT(1)   ,     KC_COMM ,KC_DOT  ,KC_RALT ,L3_RBRC
         //└────────┴────────┴────────┴────────┘    └────────┘   └────────┴────────┘       └────────┴────────┘   └────────┘    └────────┴────────┴────────┴────────┘
            ),
     [_GAME] = LAYOUT(
         //┌────────┬────────┬────────┬────────┬────────┬────────┐                                           ┌────────┬────────┬────────┬────────┬────────┬────────┐
            KC_TRNS ,KC_TRNS ,KC_TRNS ,KC_TRNS ,KC_TRNS ,KC_TRNS ,                                            KC_NO   ,KC_NO   ,KC_NO   ,KC_NO   ,KC_NO   ,KC_NO   ,
         //├────────┼────────┼────────┼────────┼────────┼────────┼────────┐                         ┌────────┼────────┼────────┼────────┼────────┼────────┼────────┤
-           KC_TRNS ,KC_TRNS ,KC_TRNS ,KC_TRNS ,KC_TRNS ,KC_TRNS ,KC_TRNS ,                          KC_NO   ,KC_NO   ,KC_PGUP ,KC_UP   ,KC_PGDN ,KC_NO   ,KC_NO   ,
+           KC_TRNS ,KC_TRNS ,KC_TRNS ,KC_TRNS ,KC_TRNS ,KC_TRNS ,KC_TRNS ,                          KC_TRNS ,KC_NO   ,KC_PGUP ,KC_UP   ,KC_PGDN ,KC_NO   ,KC_NO   ,
         //├────────┼────────┼────────┼────────┼────────┼────────┼────────┤                         ├────────┼────────┼────────┼────────┼────────┼────────┼────────┤
            KC_TRNS ,KC_TRNS ,KC_TRNS ,KC_TRNS ,KC_TRNS ,KC_TRNS ,KC_F5   ,                          KC_TRNS ,KC_HOME ,KC_LEFT ,KC_DOWN ,KC_RGHT ,KC_END  ,KC_NO   ,
         //├────────┼────────┼────────┼────────┼────────┼────────┼────────┼────────┐       ┌────────┼────────┼────────┼────────┼────────┼────────┼────────┼────────┤
@@ -308,9 +309,28 @@ void ent_reset(qk_tap_dance_state_t *state, void *user_data) {
     custom_mod_reset(enttap_state, KC_CAPS, KC_ENT);
 }
 
+void media_finished(qk_tap_dance_state_t *state, void *user_data){
+    switch (state->count){
+        case 1: register_code(KC_MPLY); break;
+        case 2: register_code(KC_MSTP); break;
+        default: register_code(KC_MUTE); break;
+    }
+}
+
+void media_reset(qk_tap_dance_state_t *state, void *user_data){
+    switch (state->count){
+        case 1: unregister_code(KC_MPLY); break;
+        case 2: unregister_code(KC_MSTP); break;
+        default: unregister_code(KC_MUTE); break;
+    }
+}
+
+
+
 qk_tap_dance_action_t tap_dance_actions[] = {
     [TD_CAPS_DEL] = ACTION_TAP_DANCE_FN_ADVANCED(del_each, del_finished, del_reset),
-    [TD_CAPS_ENT] = ACTION_TAP_DANCE_FN_ADVANCED(ent_each, ent_finished, ent_reset)
+    [TD_CAPS_ENT] = ACTION_TAP_DANCE_FN_ADVANCED(ent_each, ent_finished, ent_reset),
+    [TD_MEDIA] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, media_finished, media_reset)
 };
 
 /*bool get_retro_tapping(uint16_t keycode, keyrecord_t *record) {*/
