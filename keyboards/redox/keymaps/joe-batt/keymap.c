@@ -18,6 +18,9 @@ typedef enum {
     TD_SINGLE_HOLD,
     TD_DOUBLE_TAP,
     TD_DOUBLE_HOLD,
+    TD_DOUBLE_SINGLE_TAP, // Send two single taps
+    TD_TRIPLE_TAP,
+    TD_TRIPLE_HOLD
 } td_state_t;
 
 typedef struct {
@@ -35,59 +38,55 @@ enum {
 td_state_t cur_dance(qk_tap_dance_state_t *state);
 void custom_mod_tap(qk_tap_dance_state_t *state, uint16_t keycode);
 
+// For the x tap dance. Put it here so it can be used in any keymap
+void x_finished(qk_tap_dance_state_t *state, void *user_data);
+void x_reset(qk_tap_dance_state_t *state, void *user_data);
+void y_finished(qk_tap_dance_state_t *state, void *user_data);
+void y_reset(qk_tap_dance_state_t *state, void *user_data);
+
+
+/*#define L4_HOME LT(4, KC_HOME)*/
+/*#define L4_PGDN LT(4, KC_PGDN)*/
 #define L3_RBRC LT(3, KC_RBRC)
 #define L2_ENT LT(2, KC_ENT)
 #define SF_GUI LSFT(KC_LGUI)
+#define SFT_SPC RSFT_T(KC_SPC)
 #define SFT_BSP LSFT_T(KC_BSPC)
+#define L4_COMM LT(4, KC_COMM)
 #define CTL_TAB LCTL_T(KC_TAB)
 #define CPS_DEL TD(TD_CAPS_DEL)
 #define CPS_ENT TD(TD_CAPS_ENT)
 #define TD_MD TD(TD_MEDIA) 
-#define GUI_P LGUI(KC_V)
-#define GUI_6 LGUI(KC_6)
-#define GUI_7 LGUI(KC_7)
-#define GUI_8 LGUI(KC_8)
-#define GUI_9 LGUI(KC_9)
-#define GUI_0 LGUI(KC_0)
-#define SFT_7 LSFT(KC_7)
 
-const uint16_t PROGMEM f12_combo[] = {KC_0, KC_9, COMBO_END};
-const uint16_t PROGMEM sft_ins_combo[] = {KC_V, KC_B, COMBO_END};
-const uint16_t PROGMEM sctl_v_combo[] = {KC_B, KC_C, KC_V, COMBO_END};
-const uint16_t PROGMEM alt_f4_combo[] = {KC_2, KC_3, KC_4, COMBO_END};
-const uint16_t PROGMEM ctrl_c_combo[] = {KC_R, KC_T, COMBO_END};
-const uint16_t PROGMEM ctrl_x_combo[] = {KC_G, KC_H, COMBO_END};
-const uint16_t PROGMEM sctl_c_combo[] = {KC_T, KC_E, KC_R, COMBO_END};
-const uint16_t PROGMEM gui_ent_combo[] = {KC_U, KC_I, COMBO_END};
-const uint16_t PROGMEM gui_tab_combo[] = {KC_M, KC_LBRC, COMBO_END};
+const uint16_t PROGMEM f12_combo[] = {KC_Y, KC_U, COMBO_END};
+const uint16_t PROGMEM sft_ins_combo[] = {KC_C, KC_V, COMBO_END};
+const uint16_t PROGMEM alt_f4_combo[] = {KC_E, KC_R, KC_T, COMBO_END};
+const uint16_t PROGMEM ctrl_c_combo[] = {KC_D, KC_F, COMBO_END};
+const uint16_t PROGMEM sctl_c_combo[] = {KC_S, KC_D, KC_F, COMBO_END};
 combo_t key_combos[COMBO_COUNT] = {
     COMBO(f12_combo, KC_F12),
     COMBO(sft_ins_combo, LSFT(KC_INS)),
     COMBO(alt_f4_combo, LSG(KC_Q)),
-    COMBO(ctrl_x_combo, LCTL(KC_Q)),
     COMBO(ctrl_c_combo, LCTL(KC_R)),
     COMBO(sctl_c_combo, LCTL(LSFT(KC_R))),
-    COMBO(sctl_v_combo, LCTL(LSFT(KC_W))),
-    COMBO(gui_ent_combo, LGUI(KC_ENT)),
-    COMBO(gui_tab_combo, LGUI(KC_TAB)),
 };
 
-/*bool process_record_user(uint16_t keycode, keyrecord_t *record) {*/
-    /*switch (keycode) {*/
+bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+    switch (keycode) {
 
-    /*case KC_DEL:*/
-        /*if ( ((get_mods() & MOD_MASK_SHIFT) || (get_mods() & MOD_MASK_CTRL)) && !(get_mods() & MOD_MASK_ALT)) {*/
-            /*if (record->event.pressed) {*/
-                /*register_code(KC_INS);*/
-            /*} else {*/
-                /*unregister_code(KC_INS);*/
-            /*}*/
-        /*}*/
-        /*return false;*/
+    case KC_DEL:
+        if ( ((get_mods() & MOD_MASK_SHIFT) || (get_mods() & MOD_MASK_CTRL)) && !(get_mods() & MOD_MASK_ALT)) {
+            if (record->event.pressed) {
+                register_code(KC_INS);
+            } else {
+                unregister_code(KC_INS);
+            }
+        }
+        return false;
 
-    /*}*/
-    /*return true;*/
-/*};*/
+    }
+    return true;
+};
 
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
@@ -99,14 +98,14 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         //├────────┼────────┼────────┼────────┼────────┼────────┼────────┤                         ├────────┼────────┼────────┼────────┼────────┼────────┼────────┤
            KC_CAPS ,KC_A    ,KC_S    ,KC_D    ,KC_F    ,KC_G    ,TD_MD   ,                          KC_VOLD ,KC_H    ,KC_J    ,KC_K    ,KC_L    ,KC_SCLN ,KC_NUHS ,
         //├────────┼────────┼────────┼────────┼────────┼────────┼────────┼────────┐       ┌────────┼────────┼────────┼────────┼────────┼────────┼────────┼────────┤
-           KC_LSFT ,KC_Z    ,KC_X    ,KC_C    ,KC_V    ,KC_B    ,MO(4)   ,GUI_P   ,        KC_PSCR ,MO(4)   ,KC_N    ,KC_M    ,KC_LBRC ,KC_QUOT ,KC_SLSH ,KC_RSFT ,
+           KC_LSFT ,KC_Z    ,KC_X    ,KC_C    ,KC_V    ,KC_B    ,MO(4)   ,KC_NO   ,        KC_PSCR ,MO(4)   ,KC_N    ,KC_M    ,KC_LBRC ,KC_QUOT ,KC_SLSH ,KC_RSFT ,
         //├────────┼────────┼────────┼────────┼────┬───┴────┬───┼────────┼────────┤       ├────────┼────────┼───┬────┴───┬────┼────────┼────────┼────────┼────────┤
-           MO(3)   ,KC_NUBS ,KC_LALT ,KC_LGUI ,     CTL_TAB ,    SFT_BSP ,CPS_DEL ,        CPS_ENT ,KC_SPC  ,    TT(1)   ,     KC_COMM ,KC_DOT  ,KC_RALT ,L3_RBRC
+           MO(3)   ,KC_NUBS ,KC_LALT ,KC_LGUI ,     CTL_TAB ,    SFT_BSP ,CPS_DEL ,        CPS_ENT  ,SFT_SPC,    TT(1)   ,     KC_COMM ,KC_DOT  ,KC_RALT ,L3_RBRC
         //└────────┴────────┴────────┴────────┘    └────────┘   └────────┴────────┘       └────────┴────────┘   └────────┘    └────────┴────────┴────────┴────────┘
            ),
     [_GAME] = LAYOUT(
         //┌────────┬────────┬────────┬────────┬────────┬────────┐                                           ┌────────┬────────┬────────┬────────┬────────┬────────┐
-           KC_TRNS ,KC_TRNS ,KC_TRNS ,KC_TRNS ,KC_TRNS ,KC_TRNS ,                                            GUI_6   ,GUI_7   ,GUI_8   ,GUI_9   ,GUI_0   ,KC_NO   ,
+           KC_TRNS ,KC_TRNS ,KC_TRNS ,KC_TRNS ,KC_TRNS ,KC_TRNS ,                                            KC_NO   ,KC_NO   ,KC_NO   ,KC_NO   ,KC_NO   ,KC_NO   ,
         //├────────┼────────┼────────┼────────┼────────┼────────┼────────┐                         ┌────────┼────────┼────────┼────────┼────────┼────────┼────────┤
            KC_TRNS ,KC_TRNS ,KC_TRNS ,KC_TRNS ,KC_TRNS ,KC_TRNS ,KC_TRNS ,                          KC_TRNS ,KC_NO   ,KC_PGUP ,KC_UP   ,KC_PGDN ,KC_NO   ,KC_NO   ,
         //├────────┼────────┼────────┼────────┼────────┼────────┼────────┤                         ├────────┼────────┼────────┼────────┼────────┼────────┼────────┤
@@ -125,22 +124,35 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         //├────────┼────────┼────────┼────────┼────────┼────────┼────────┐                         ┌────────┼────────┼────────┼────────┼────────┼────────┼────────┤
            KC_NO   ,KC_SCLN ,KC_L    ,KC_K    ,KC_J    ,KC_H    ,KC_F9   ,                          KC_TRNS ,KC_NO   ,KC_NO   ,KC_NO   ,KC_NO   ,KC_NO   ,KC_NO   , 
         //├────────┼────────┼────────┼────────┼────────┼────────┼────────┼────────┐       ┌────────┼────────┼────────┼────────┼────────┼────────┼────────┼────────┤
-           KC_LSFT ,KC_SLSH ,KC_QUOT ,KC_LBRC ,KC_M    ,KC_N    ,KC_TRNS ,SFT_7   ,        KC_NO   ,KC_TRNS ,KC_NO   ,KC_NO   ,KC_NO   ,KC_NO   ,KC_NO   ,KC_NO   , 
+           KC_LSFT ,KC_SLSH ,KC_QUOT ,KC_LBRC ,KC_M    ,KC_N    ,KC_TRNS ,KC_NO   ,        KC_NO   ,KC_TRNS ,KC_NO   ,KC_NO   ,KC_NO   ,KC_NO   ,KC_NO   ,KC_NO   , 
         //├────────┼────────┼────────┼────────┼────┬───┴────┬───┼────────┼────────┤       ├────────┼────────┼───┬────┴───┬────┼────────┼────────┼────────┼────────┤
            KC_TRNS ,KC_TRNS ,KC_DOT  ,KC_COMM ,     KC_NO   ,    KC_BSPC ,KC_TRNS ,        KC_NO   ,KC_NO   ,    KC_NO   ,     KC_TRNS ,KC_NO   ,KC_NO   , KC_TRNS
         //└────────┴────────┴────────┴────────┘    └────────┘   └────────┴────────┘       └────────┴────────┘   └────────┘    └────────┴────────┴────────┴────────┘
             ),
+	/*[_FLIP] = LAYOUT(*/
+        /*//┌────────┬────────┬────────┬────────┬────────┬────────┐                                           ┌────────┬────────┬────────┬────────┬────────┬────────┐*/
+           /*KC_NO   ,KC_6    ,KC_7    ,KC_8    ,KC_9    ,KC_0    ,                                            KC_NO   ,KC_NO   ,KC_NO   ,KC_NO   ,KC_NO   ,KC_NO   , */
+        /*//├────────┼────────┼────────┼────────┼────────┼────────┼────────┐                         ┌────────┼────────┼────────┼────────┼────────┼────────┼────────┤*/
+           /*KC_NO   ,KC_Y    ,KC_U    ,KC_I    ,KC_O    ,KC_P    ,KC_NO   ,                          KC_TRNS ,KC_NO   ,KC_NO   ,KC_NO   ,KC_NO   ,KC_NO   ,KC_NO   ,*/
+        /*//├────────┼────────┼────────┼────────┼────────┼────────┼────────┐                         ┌────────┼────────┼────────┼────────┼────────┼────────┼────────┤*/
+           /*KC_NO   ,KC_H    ,KC_J    ,KC_K    ,KC_L    ,KC_SCLN ,KC_F9   ,                          KC_TRNS ,KC_NO   ,KC_NO   ,KC_NO   ,KC_NO   ,KC_NO   ,KC_NO   , */
+        /*//├────────┼────────┼────────┼────────┼────────┼────────┼────────┼────────┐       ┌────────┼────────┼────────┼────────┼────────┼────────┼────────┼────────┤*/
+           /*KC_LSFT ,KC_N    ,KC_M    ,KC_LBRC ,KC_QUOT ,KC_SLSH ,KC_TRNS ,KC_NO   ,        KC_NO   ,KC_TRNS ,KC_NO   ,KC_NO   ,KC_NO   ,KC_NO   ,KC_NO   ,KC_NO   , */
+        /*//├────────┼────────┼────────┼────────┼────┬───┴────┬───┼────────┼────────┤       ├────────┼────────┼───┬────┴───┬────┼────────┼────────┼────────┼────────┤*/
+           /*KC_TRNS ,KC_TRNS ,KC_COMM ,KC_DOT  ,     KC_NO   ,    KC_TRNS ,KC_TRNS ,        KC_NO   ,KC_NO   ,    KC_NO   ,     KC_TRNS ,KC_NO   ,KC_NO   , KC_TRNS*/
+        /*//└────────┴────────┴────────┴────────┘    └────────┘   └────────┴────────┘       └────────┴────────┘   └────────┘    └────────┴────────┴────────┴────────┘*/
+            /*),*/
 	[_FAUDIO] = LAYOUT(
         //┌────────┬────────┬────────┬────────┬────────┬────────┐                                           ┌────────┬────────┬────────┬────────┬────────┬────────┐
-           RESET   ,KC_NO   ,KC_NO   ,KC_NO   ,KC_NO   ,KC_NO   ,                                            KC_NO   ,KC_NO   ,KC_NO   ,KC_NO   ,KC_NO   ,RESET   , 
+           RESET   ,KC_NO   ,KC_F10  ,KC_F11  ,KC_F12  ,KC_NO   ,                                            KC_NO   ,KC_NO   ,KC_NO   ,KC_NO   ,KC_NO   ,RESET   , 
         //├────────┼────────┼────────┼────────┼────────┼────────┼────────┐                         ┌────────┼────────┼────────┼────────┼────────┼────────┼────────┤
-           KC_NO   ,KC_NO   ,KC_F9   ,KC_F10  ,KC_F11  ,KC_F12  ,NK_ON   ,                          KC_MNXT ,KC_NO   ,KC_7    ,KC_8    ,KC_9    ,KC_PMNS ,KC_NO   , 
+           KC_NO   ,KC_NO   ,KC_F7   ,KC_F8   ,KC_F9   ,KC_NO   ,NK_ON   ,                          KC_TRNS ,KC_NO   ,KC_MRWD ,KC_MFFD ,KC_NO   ,KC_NO   ,KC_NO   , 
         //├────────┼────────┼────────┼────────┼────────┼────────┼────────┐                         ┌────────┼────────┼────────┼────────┼────────┼────────┼────────┤
-           SF_GUI  ,KC_NO   ,KC_F5   ,KC_F6   ,KC_F7   ,KC_F8   ,NK_OFF  ,                          KC_MPRV ,KC_NO   ,KC_4    ,KC_5    ,KC_6    ,KC_PPLS ,KC_NO   , 
+           SF_GUI  ,KC_NO   ,KC_F4   ,KC_F5   ,KC_F6   ,KC_NO   ,NK_OFF  ,                          KC_TRNS ,KC_NO   ,KC_MPLY ,KC_MSTP ,KC_MUTE ,KC_NO   ,KC_NO   , 
         //├────────┼────────┼────────┼────────┼────────┼────────┼────────┼────────┐       ┌────────┼────────┼────────┼────────┼────────┼────────┼────────┼────────┤
-           KC_TRNS ,KC_NO   ,KC_F1   ,KC_F2   ,KC_F3   ,KC_F4   ,KC_TRNS ,KC_NO   ,        KC_NO   ,KC_TRNS ,KC_0    ,KC_1    ,KC_2    ,KC_3    ,KC_PAST ,KC_NO   , 
+           KC_TRNS ,KC_NO   ,KC_F1   ,KC_F2   ,KC_F3   ,KC_NO   ,KC_TRNS ,KC_NO   ,        KC_NO   ,KC_TRNS ,KC_NO   ,KC_NO   ,KC_NO   ,KC_NO   ,KC_NO   ,KC_NO   , 
         //├────────┼────────┼────────┼────────┼────┬───┴────┬───┼────────┼────────┤       ├────────┼────────┼───┬────┴───┬────┼────────┼────────┼────────┼────────┤
-           KC_TRNS ,KC_TRNS ,KC_TRNS ,KC_RGUI ,     KC_RCTL ,    DM_REC1 ,DM_PLY1 ,        KC_NO   ,KC_NO   ,    KC_NO   ,     KC_COMM ,KC_DOT  ,KC_PSLS ,KC_TRNS
+           KC_TRNS ,KC_TRNS ,KC_TRNS ,KC_RGUI ,     KC_RCTL ,    KC_NO   ,KC_NO   ,        KC_NO   ,KC_NO   ,    KC_NO   ,     KC_NO   ,KC_NO   ,KC_NO   ,KC_TRNS
         //└────────┴────────┴────────┴────────┘    └────────┘   └────────┴────────┘       └────────┴────────┘   └────────┘    └────────┴────────┴────────┴────────┘
            ),
     [_RGBMOUSE] = LAYOUT(
@@ -151,9 +163,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         //├────────┼────────┼────────┼────────┼────────┼────────┼────────┐                         ┌────────┼────────┼────────┼────────┼────────┼────────┼────────┤
            RGB_HUI ,RGB_M_B ,RGB_M_G ,RGB_M_P ,RGB_SPD ,RGB_SPI ,RGB_VAD ,                          KC_NO   ,KC_NO   ,KC_MS_L ,KC_MS_D ,KC_MS_R ,KC_NO   ,KC_NO   ,
         //├────────┼────────┼────────┼────────┼────────┼────────┼────────┼────────┐       ┌────────┼────────┼────────┼────────┼────────┼────────┼────────┼────────┤
-           RGB_HUD ,KC_NO   ,KC_NO   ,KC_NO   ,KC_NO   ,KC_NO   ,KC_TRNS ,KC_NO   ,        KC_NO   ,KC_TRNS ,KC_NO   ,KC_NO   ,KC_NO   ,KC_NO   ,KC_NO   ,KC_NO   ,
+           RGB_HUD ,KC_NO   ,KC_NO   ,KC_NO   ,KC_NO   ,KC_NO   ,KC_TRNS ,KC_NO   ,        KC_BTN3 ,KC_TRNS ,KC_NO   ,KC_NO   ,KC_NO   ,KC_NO   ,KC_NO   ,KC_NO   ,
         //├────────┼────────┼────────┼────────┼────┬───┴────┬───┼────────┼────────┤       ├────────┼────────┼───┬────┴───┬────┼────────┼────────┼────────┼────────┤
-           KC_TRNS ,KC_NO   ,KC_NO   ,KC_TRNS ,     KC_ACL0 ,    KC_ACL1 ,KC_ACL2 ,        KC_BTN3 ,KC_BTN1 ,    KC_BTN2 ,     KC_NO   ,KC_NO   ,KC_NO   ,KC_NO
+           KC_TRNS ,KC_NO   ,KC_NO   ,KC_TRNS ,     KC_NO   ,    KC_NO   ,KC_NO   ,        KC_BTN2 ,KC_BTN1 ,    KC_NO   ,     KC_NO   ,KC_NO   ,KC_NO   ,KC_NO
         //└────────┴────────┴────────┴────────┘    └────────┘   └────────┴────────┘       └────────┴────────┘   └────────┘    └────────┴────────┴────────┴────────┘
            )
 };
@@ -163,7 +175,7 @@ const rgblight_segment_t PROGMEM my_capslock_layer[] = RGBLIGHT_LAYER_SEGMENTS(
 );
 
 const rgblight_segment_t PROGMEM my_numlock_layer[] = RGBLIGHT_LAYER_SEGMENTS(
-    {12, 2, HSV_RED}
+    {12, 2, HSV_ORANGE}
 );
 
 const rgblight_segment_t PROGMEM my_gaming_layer[] = RGBLIGHT_LAYER_SEGMENTS(
@@ -180,34 +192,14 @@ const rgblight_segment_t PROGMEM my_faudio_layer[] = RGBLIGHT_LAYER_SEGMENTS(
     {0, 14, HSV_SPRINGGREEN}
 );
 
-const rgblight_segment_t PROGMEM my_record_end_layer[] = RGBLIGHT_LAYER_SEGMENTS(
-    {0, 14, HSV_WHITE}
-);
-
-const rgblight_segment_t PROGMEM my_record_start_layer[] = RGBLIGHT_LAYER_SEGMENTS(
-    {0, 14, HSV_RED}
-);
 
 const rgblight_segment_t* const PROGMEM my_rgb_layers[] = RGBLIGHT_LAYERS_LIST(
     my_gaming_layer,
     my_capslock_layer,
     my_numlock_layer,
     my_faudio_layer,
-    my_flip_layer,
-    my_record_start_layer,
-    my_record_end_layer
+    my_flip_layer
 );
-
-void dynamic_macro_record_start_user(void) {
-    /*rgblight_set_layer_state(5, true);*/
-    rgblight_blink_layer_repeat(5, 300, 2);
-}
-
-void dynamic_macro_record_end_user(int8_t direction) {
-    rgblight_blink_layer_repeat(6, 300, 2);
-    /*rgblight_set_layer_state(5, false);*/
-}
-
 
 void keyboard_post_init_user(void) {
     // Enable the LED layers
@@ -347,8 +339,18 @@ void media_reset(qk_tap_dance_state_t *state, void *user_data){
 }
 
 
+
 qk_tap_dance_action_t tap_dance_actions[] = {
     [TD_CAPS_DEL] = ACTION_TAP_DANCE_FN_ADVANCED(del_each, del_finished, del_reset),
     [TD_CAPS_ENT] = ACTION_TAP_DANCE_FN_ADVANCED(ent_each, ent_finished, ent_reset),
     [TD_MEDIA] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, media_finished, media_reset)
 };
+
+/*bool get_retro_tapping(uint16_t keycode, keyrecord_t *record) {*/
+    /*switch (keycode) {*/
+        /*case CTL_TAB:*/
+            /*return false;*/
+        /*default:*/
+            /*return true;*/
+    /*}*/
+/*}*/
