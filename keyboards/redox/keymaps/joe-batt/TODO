@@ -1,0 +1,11 @@
+Maus anpassen
+ggf toggle für maus auf neo-d legen
+maustasten:
+tt1 -> rb
+space -> lb
+enter -> mb
+
+kinetic mode und constant ausprobieren:
+https://docs.qmk.fm/#/feature_mouse_keys?id=accelerated-mode
+
+space nur space
