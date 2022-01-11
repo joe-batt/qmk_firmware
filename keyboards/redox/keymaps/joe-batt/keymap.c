@@ -163,9 +163,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         //├────────┼────────┼────────┼────────┼────────┼────────┼────────┐                         ┌────────┼────────┼────────┼────────┼────────┼────────┼────────┤
            RGB_HUI ,RGB_M_B ,RGB_M_G ,RGB_M_P ,RGB_SPD ,RGB_SPI ,RGB_VAD ,                          KC_NO   ,KC_NO   ,KC_MS_L ,KC_MS_D ,KC_MS_R ,KC_NO   ,KC_NO   ,
         //├────────┼────────┼────────┼────────┼────────┼────────┼────────┼────────┐       ┌────────┼────────┼────────┼────────┼────────┼────────┼────────┼────────┤
-           RGB_HUD ,KC_NO   ,KC_NO   ,KC_NO   ,KC_NO   ,KC_NO   ,KC_TRNS ,KC_NO   ,        KC_BTN3 ,KC_TRNS ,KC_NO   ,KC_NO   ,KC_NO   ,KC_NO   ,KC_NO   ,KC_NO   ,
+           RGB_HUD ,KC_NO   ,KC_NO   ,KC_NO   ,KC_NO   ,KC_NO   ,KC_TRNS ,KC_NO   ,        KC_NO   ,KC_TRNS ,KC_NO   ,KC_NO   ,KC_NO   ,KC_NO   ,KC_NO   ,KC_NO   ,
         //├────────┼────────┼────────┼────────┼────┬───┴────┬───┼────────┼────────┤       ├────────┼────────┼───┬────┴───┬────┼────────┼────────┼────────┼────────┤
-           KC_TRNS ,KC_NO   ,KC_NO   ,KC_TRNS ,     KC_NO   ,    KC_NO   ,KC_NO   ,        KC_BTN2 ,KC_BTN1 ,    KC_NO   ,     KC_NO   ,KC_NO   ,KC_NO   ,KC_NO
+           KC_TRNS ,KC_NO   ,KC_NO   ,KC_TRNS ,     KC_ACL0 ,    KC_ACL1 ,KC_ACL2 ,        KC_BTN3 ,KC_BTN1 ,    KC_BTN2 ,     KC_NO   ,KC_NO   ,KC_NO   ,KC_NO
         //└────────┴────────┴────────┴────────┘    └────────┘   └────────┴────────┘       └────────┴────────┘   └────────┘    └────────┴────────┴────────┴────────┘
            )
 };
@@ -175,7 +175,7 @@ const rgblight_segment_t PROGMEM my_capslock_layer[] = RGBLIGHT_LAYER_SEGMENTS(
 );
 
 const rgblight_segment_t PROGMEM my_numlock_layer[] = RGBLIGHT_LAYER_SEGMENTS(
-    {12, 2, HSV_ORANGE}
+    {12, 2, HSV_RED}
 );
 
 const rgblight_segment_t PROGMEM my_gaming_layer[] = RGBLIGHT_LAYER_SEGMENTS(
