@@ -50,3 +50,16 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define NKRO_ENABLE
 #define TAPPING_TOGGLE 3
 #define TAPPING_TERM 180
+//#define MK_3_SPEED
+//#define MK_C_OFFSET_0 8
+//#define MK_C_INTERVAL_0 16
+//#define MK_C_OFFSET_1 12
+//#define MK_C_INTERVAL_1 16
+//#define MK_C_OFFSET_2 16
+//#define MK_C_INTERVAL_2 16
+//
+#define MK_KINETIC_SPEED
+#define MOUSEKEY_INTERVAL 8
+#define MOUSEKEY_MOVE_DELTA 1
+#define MOUSEKEY_INITIAL_SPEED 2
+#define MOUSEKEY_BASE_SPEED 32
