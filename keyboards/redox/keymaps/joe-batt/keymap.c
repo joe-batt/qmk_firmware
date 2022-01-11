@@ -201,6 +201,16 @@ const rgblight_segment_t* const PROGMEM my_rgb_layers[] = RGBLIGHT_LAYERS_LIST(
     my_flip_layer
 );
 
+bool get_hold_on_other_key_press(uint16_t keycode, keyrecord_t *record) {
+    switch (keycode) {
+        case SFT_SPC:
+            // Immediately select the hold action when another key is pressed.
+            return false;
+        default:
+            // Do not select the hold action when another key is pressed.
+            return true;
+    }
+}
 void keyboard_post_init_user(void) {
     // Enable the LED layers
     rgblight_layers = my_rgb_layers;
