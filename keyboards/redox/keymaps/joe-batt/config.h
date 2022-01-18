@@ -41,15 +41,15 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define RGBLIGHT_SAT_STEP 8
 #define RGBLIGHT_VAL_STEP 8
 #define RGBLIGHT_LAYERS
-#define COMBO_COUNT 5
-#define IGNORE_MOD_TAP_INTERRUPT
+#define COMBO_COUNT 7
+//#define IGNORE_MOD_TAP_INTERRUPT
 #define PERMISSIVE_HOLD
-#define HOLD_ON_OTHER_KEY_PRESS_PER_KEY
+//#define HOLD_ON_OTHER_KEY_PRESS_PER_KEY
 //#define RETRO_TAPPING
 //#define RETRO_TAPPING_PER_KEY
 #define NKRO_ENABLE
 #define TAPPING_TOGGLE 3
-#define TAPPING_TERM 180
+#define TAPPING_TERM 190
 //#define MK_3_SPEED
 //#define MK_C_OFFSET_0 8
 //#define MK_C_INTERVAL_0 16
