@@ -123,9 +123,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         //┌────────┬────────┬────────┬────────┬────────┬────────┐                                           ┌────────┬────────┬────────┬────────┬────────┬────────┐
            RESET   ,KC_NO   ,KC_NO   ,KC_NO   ,KC_NO   ,KC_NO   ,                                            KC_NO   ,KC_NO   ,KC_NO   ,KC_NO   ,KC_NO   ,RESET   , 
         //├────────┼────────┼────────┼────────┼────────┼────────┼────────┐                         ┌────────┼────────┼────────┼────────┼────────┼────────┼────────┤
-           KC_NO   ,KC_NO   ,KC_F9   ,KC_F10  ,KC_F11  ,KC_F12  ,NK_ON   ,                          KC_MFFD ,KC_NO   ,KC_7    ,KC_8    ,KC_9    ,KC_PMNS ,KC_NO   , 
+           KC_NO   ,KC_NO   ,KC_F9   ,KC_F10  ,KC_F11  ,KC_F12  ,NK_ON   ,                          KC_MNXT ,KC_NO   ,KC_7    ,KC_8    ,KC_9    ,KC_PMNS ,KC_NO   , 
         //├────────┼────────┼────────┼────────┼────────┼────────┼────────┐                         ┌────────┼────────┼────────┼────────┼────────┼────────┼────────┤
-           SF_GUI  ,KC_NO   ,KC_F5   ,KC_F6   ,KC_F7   ,KC_F8   ,NK_OFF  ,                          KC_MRWD ,KC_NO   ,KC_4    ,KC_5    ,KC_6    ,KC_PPLS ,KC_NO   , 
+           SF_GUI  ,KC_NO   ,KC_F5   ,KC_F6   ,KC_F7   ,KC_F8   ,NK_OFF  ,                          KC_MPRV ,KC_NO   ,KC_4    ,KC_5    ,KC_6    ,KC_PPLS ,KC_NO   , 
         //├────────┼────────┼────────┼────────┼────────┼────────┼────────┼────────┐       ┌────────┼────────┼────────┼────────┼────────┼────────┼────────┼────────┤
            KC_TRNS ,KC_NO   ,KC_F1   ,KC_F2   ,KC_F3   ,KC_F4   ,KC_TRNS ,KC_NO   ,        KC_NO   ,KC_TRNS ,KC_0    ,KC_1    ,KC_2    ,KC_3    ,KC_PAST ,KC_NO   , 
         //├────────┼────────┼────────┼────────┼────┬───┴────┬───┼────────┼────────┤       ├────────┼────────┼───┬────┴───┬────┼────────┼────────┼────────┼────────┤
@@ -169,14 +169,34 @@ const rgblight_segment_t PROGMEM my_faudio_layer[] = RGBLIGHT_LAYER_SEGMENTS(
     {0, 14, HSV_SPRINGGREEN}
 );
 
+const rgblight_segment_t PROGMEM my_record_end_layer[] = RGBLIGHT_LAYER_SEGMENTS(
+    {0, 14, HSV_WHITE}
+);
+
+const rgblight_segment_t PROGMEM my_record_start_layer[] = RGBLIGHT_LAYER_SEGMENTS(
+    {0, 14, HSV_RED}
+);
 
 const rgblight_segment_t* const PROGMEM my_rgb_layers[] = RGBLIGHT_LAYERS_LIST(
     my_gaming_layer,
     my_capslock_layer,
     my_numlock_layer,
     my_faudio_layer,
-    my_flip_layer
+    my_flip_layer,
+    my_record_start_layer,
+    my_record_end_layer
 );
+
+void dynamic_macro_record_start_user(void) {
+    /*rgblight_set_layer_state(5, true);*/
+    rgblight_blink_layer_repeat(5, 300, 2);
+}
+
+void dynamic_macro_record_end_user(int8_t direction) {
+    rgblight_blink_layer_repeat(6, 300, 2);
+    /*rgblight_set_layer_state(5, false);*/
+}
+
 
 void keyboard_post_init_user(void) {
     // Enable the LED layers
