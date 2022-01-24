@@ -44,19 +44,23 @@ void custom_mod_tap(qk_tap_dance_state_t *state, uint16_t keycode);
 #define CPS_ENT TD(TD_CAPS_ENT)
 #define TD_MD TD(TD_MEDIA) 
 
-const uint16_t PROGMEM f12_combo[] = {KC_U, KC_I, COMBO_END};
+const uint16_t PROGMEM f12_combo[] = {KC_0, KC_9, COMBO_END};
 const uint16_t PROGMEM sft_ins_combo[] = {KC_C, KC_V, COMBO_END};
+const uint16_t PROGMEM sctl_v_combo[] = {KC_X, KC_C, KC_V, COMBO_END};
 const uint16_t PROGMEM alt_f4_combo[] = {KC_W, KC_E, KC_R, COMBO_END};
 const uint16_t PROGMEM ctrl_c_combo[] = {KC_D, KC_F, COMBO_END};
+const uint16_t PROGMEM ctrl_x_combo[] = {KC_G, KC_F, COMBO_END};
 const uint16_t PROGMEM sctl_c_combo[] = {KC_S, KC_D, KC_F, COMBO_END};
-const uint16_t PROGMEM gui_ent_combo[] = {KC_J, KC_K, COMBO_END};
+const uint16_t PROGMEM gui_ent_combo[] = {KC_U, KC_I, COMBO_END};
 const uint16_t PROGMEM gui_tab_combo[] = {KC_M, KC_LBRC, COMBO_END};
 combo_t key_combos[COMBO_COUNT] = {
     COMBO(f12_combo, KC_F12),
     COMBO(sft_ins_combo, LSFT(KC_INS)),
     COMBO(alt_f4_combo, LSG(KC_Q)),
+    COMBO(ctrl_x_combo, LCTL(KC_Q)),
     COMBO(ctrl_c_combo, LCTL(KC_R)),
     COMBO(sctl_c_combo, LCTL(LSFT(KC_R))),
+    COMBO(sctl_v_combo, LCTL(LSFT(KC_W))),
     COMBO(gui_ent_combo, LGUI(KC_ENT)),
     COMBO(gui_tab_combo, LGUI(KC_TAB)),
 };
