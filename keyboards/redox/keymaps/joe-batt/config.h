@@ -41,7 +41,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define RGBLIGHT_SAT_STEP 8
 #define RGBLIGHT_VAL_STEP 8
 #define RGBLIGHT_LAYERS
-#define COMBO_COUNT 7
+#define COMBO_COUNT 9
 //#define IGNORE_MOD_TAP_INTERRUPT
 #define PERMISSIVE_HOLD
 //#define HOLD_ON_OTHER_KEY_PRESS_PER_KEY
