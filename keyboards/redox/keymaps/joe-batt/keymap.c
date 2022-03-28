@@ -43,14 +43,20 @@ void custom_mod_tap(qk_tap_dance_state_t *state, uint16_t keycode);
 #define CPS_DEL TD(TD_CAPS_DEL)
 #define CPS_ENT TD(TD_CAPS_ENT)
 #define TD_MD TD(TD_MEDIA) 
+#define GUI_P LGUI(KC_V)
+#define GUI_6 LGUI(KC_6)
+#define GUI_7 LGUI(KC_7)
+#define GUI_8 LGUI(KC_8)
+#define GUI_9 LGUI(KC_9)
+#define GUI_0 LGUI(KC_0)
 
 const uint16_t PROGMEM f12_combo[] = {KC_0, KC_9, COMBO_END};
-const uint16_t PROGMEM sft_ins_combo[] = {KC_C, KC_V, COMBO_END};
+const uint16_t PROGMEM sft_ins_combo[] = {KC_V, KC_C, COMBO_END};
 const uint16_t PROGMEM sctl_v_combo[] = {KC_X, KC_C, KC_V, COMBO_END};
-const uint16_t PROGMEM alt_f4_combo[] = {KC_W, KC_E, KC_R, COMBO_END};
-const uint16_t PROGMEM ctrl_c_combo[] = {KC_S, KC_D, COMBO_END};
+const uint16_t PROGMEM alt_f4_combo[] = {KC_2, KC_3, KC_4, COMBO_END};
+const uint16_t PROGMEM ctrl_c_combo[] = {KC_E, KC_R, COMBO_END};
 const uint16_t PROGMEM ctrl_x_combo[] = {KC_G, KC_F, COMBO_END};
-const uint16_t PROGMEM sctl_c_combo[] = {KC_S, KC_D, KC_F, COMBO_END};
+const uint16_t PROGMEM sctl_c_combo[] = {KC_W, KC_E, KC_R, COMBO_END};
 const uint16_t PROGMEM gui_ent_combo[] = {KC_U, KC_I, COMBO_END};
 const uint16_t PROGMEM gui_tab_combo[] = {KC_M, KC_LBRC, COMBO_END};
 combo_t key_combos[COMBO_COUNT] = {
@@ -92,14 +98,14 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         //├────────┼────────┼────────┼────────┼────────┼────────┼────────┤                         ├────────┼────────┼────────┼────────┼────────┼────────┼────────┤
            KC_CAPS ,KC_A    ,KC_S    ,KC_D    ,KC_F    ,KC_G    ,TD_MD   ,                          KC_VOLD ,KC_H    ,KC_J    ,KC_K    ,KC_L    ,KC_SCLN ,KC_NUHS ,
         //├────────┼────────┼────────┼────────┼────────┼────────┼────────┼────────┐       ┌────────┼────────┼────────┼────────┼────────┼────────┼────────┼────────┤
-           KC_LSFT ,KC_Z    ,KC_X    ,KC_C    ,KC_V    ,KC_B    ,MO(4)   ,KC_NO   ,        KC_PSCR ,MO(4)   ,KC_N    ,KC_M    ,KC_LBRC ,KC_QUOT ,KC_SLSH ,KC_RSFT ,
+           KC_LSFT ,KC_Z    ,KC_X    ,KC_C    ,KC_V    ,KC_B    ,MO(4)   ,GUI_P   ,        KC_PSCR ,MO(4)   ,KC_N    ,KC_M    ,KC_LBRC ,KC_QUOT ,KC_SLSH ,KC_RSFT ,
         //├────────┼────────┼────────┼────────┼────┬───┴────┬───┼────────┼────────┤       ├────────┼────────┼───┬────┴───┬────┼────────┼────────┼────────┼────────┤
            MO(3)   ,KC_NUBS ,KC_LALT ,KC_LGUI ,     CTL_TAB ,    SFT_BSP ,CPS_DEL ,        CPS_ENT ,KC_SPC  ,    TT(1)   ,     KC_COMM ,KC_DOT  ,KC_RALT ,L3_RBRC
         //└────────┴────────┴────────┴────────┘    └────────┘   └────────┴────────┘       └────────┴────────┘   └────────┘    └────────┴────────┴────────┴────────┘
            ),
     [_GAME] = LAYOUT(
         //┌────────┬────────┬────────┬────────┬────────┬────────┐                                           ┌────────┬────────┬────────┬────────┬────────┬────────┐
-           KC_TRNS ,KC_TRNS ,KC_TRNS ,KC_TRNS ,KC_TRNS ,KC_TRNS ,                                            KC_NO   ,KC_NO   ,KC_NO   ,KC_NO   ,KC_NO   ,KC_NO   ,
+           KC_TRNS ,KC_TRNS ,KC_TRNS ,KC_TRNS ,KC_TRNS ,KC_TRNS ,                                            GUI_6   ,GUI_7   ,GUI_8   ,GUI_9   ,GUI_0   ,KC_NO   ,
         //├────────┼────────┼────────┼────────┼────────┼────────┼────────┐                         ┌────────┼────────┼────────┼────────┼────────┼────────┼────────┤
            KC_TRNS ,KC_TRNS ,KC_TRNS ,KC_TRNS ,KC_TRNS ,KC_TRNS ,KC_TRNS ,                          KC_TRNS ,KC_NO   ,KC_PGUP ,KC_UP   ,KC_PGDN ,KC_NO   ,KC_NO   ,
         //├────────┼────────┼────────┼────────┼────────┼────────┼────────┤                         ├────────┼────────┼────────┼────────┼────────┼────────┼────────┤
