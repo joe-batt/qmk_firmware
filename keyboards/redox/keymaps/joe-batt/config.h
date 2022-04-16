@@ -65,3 +65,4 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define MOUSEKEY_MOVE_DELTA 1
 #define MOUSEKEY_INITIAL_SPEED 2
 #define MOUSEKEY_BASE_SPEED 32
+#define USB_POLLING_INTERVAL_MS 2
