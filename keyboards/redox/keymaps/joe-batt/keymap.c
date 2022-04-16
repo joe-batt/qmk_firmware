@@ -49,14 +49,15 @@ void custom_mod_tap(qk_tap_dance_state_t *state, uint16_t keycode);
 #define GUI_8 LGUI(KC_8)
 #define GUI_9 LGUI(KC_9)
 #define GUI_0 LGUI(KC_0)
+#define SFT_7 LSFT(KC_7)
 
 const uint16_t PROGMEM f12_combo[] = {KC_0, KC_9, COMBO_END};
-const uint16_t PROGMEM sft_ins_combo[] = {KC_V, KC_C, COMBO_END};
-const uint16_t PROGMEM sctl_v_combo[] = {KC_X, KC_C, KC_V, COMBO_END};
+const uint16_t PROGMEM sft_ins_combo[] = {KC_V, KC_B, COMBO_END};
+const uint16_t PROGMEM sctl_v_combo[] = {KC_B, KC_C, KC_V, COMBO_END};
 const uint16_t PROGMEM alt_f4_combo[] = {KC_2, KC_3, KC_4, COMBO_END};
-const uint16_t PROGMEM ctrl_c_combo[] = {KC_E, KC_R, COMBO_END};
-const uint16_t PROGMEM ctrl_x_combo[] = {KC_G, KC_F, COMBO_END};
-const uint16_t PROGMEM sctl_c_combo[] = {KC_W, KC_E, KC_R, COMBO_END};
+const uint16_t PROGMEM ctrl_c_combo[] = {KC_R, KC_T, COMBO_END};
+const uint16_t PROGMEM ctrl_x_combo[] = {KC_G, KC_H, COMBO_END};
+const uint16_t PROGMEM sctl_c_combo[] = {KC_T, KC_E, KC_R, COMBO_END};
 const uint16_t PROGMEM gui_ent_combo[] = {KC_U, KC_I, COMBO_END};
 const uint16_t PROGMEM gui_tab_combo[] = {KC_M, KC_LBRC, COMBO_END};
 combo_t key_combos[COMBO_COUNT] = {
@@ -71,22 +72,22 @@ combo_t key_combos[COMBO_COUNT] = {
     COMBO(gui_tab_combo, LGUI(KC_TAB)),
 };
 
-bool process_record_user(uint16_t keycode, keyrecord_t *record) {
-    switch (keycode) {
+/*bool process_record_user(uint16_t keycode, keyrecord_t *record) {*/
+    /*switch (keycode) {*/
 
-    case KC_DEL:
-        if ( ((get_mods() & MOD_MASK_SHIFT) || (get_mods() & MOD_MASK_CTRL)) && !(get_mods() & MOD_MASK_ALT)) {
-            if (record->event.pressed) {
-                register_code(KC_INS);
-            } else {
-                unregister_code(KC_INS);
-            }
-        }
-        return false;
+    /*case KC_DEL:*/
+        /*if ( ((get_mods() & MOD_MASK_SHIFT) || (get_mods() & MOD_MASK_CTRL)) && !(get_mods() & MOD_MASK_ALT)) {*/
+            /*if (record->event.pressed) {*/
+                /*register_code(KC_INS);*/
+            /*} else {*/
+                /*unregister_code(KC_INS);*/
+            /*}*/
+        /*}*/
+        /*return false;*/
 
-    }
-    return true;
-};
+    /*}*/
+    /*return true;*/
+/*};*/
 
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
@@ -124,7 +125,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         //├────────┼────────┼────────┼────────┼────────┼────────┼────────┐                         ┌────────┼────────┼────────┼────────┼────────┼────────┼────────┤
            KC_NO   ,KC_SCLN ,KC_L    ,KC_K    ,KC_J    ,KC_H    ,KC_F9   ,                          KC_TRNS ,KC_NO   ,KC_NO   ,KC_NO   ,KC_NO   ,KC_NO   ,KC_NO   , 
         //├────────┼────────┼────────┼────────┼────────┼────────┼────────┼────────┐       ┌────────┼────────┼────────┼────────┼────────┼────────┼────────┼────────┤
-           KC_LSFT ,KC_SLSH ,KC_QUOT ,KC_LBRC ,KC_M    ,KC_N    ,KC_TRNS ,KC_NO   ,        KC_NO   ,KC_TRNS ,KC_NO   ,KC_NO   ,KC_NO   ,KC_NO   ,KC_NO   ,KC_NO   , 
+           KC_LSFT ,KC_SLSH ,KC_QUOT ,KC_LBRC ,KC_M    ,KC_N    ,KC_TRNS ,SFT_7   ,        KC_NO   ,KC_TRNS ,KC_NO   ,KC_NO   ,KC_NO   ,KC_NO   ,KC_NO   ,KC_NO   , 
         //├────────┼────────┼────────┼────────┼────┬───┴────┬───┼────────┼────────┤       ├────────┼────────┼───┬────┴───┬────┼────────┼────────┼────────┼────────┤
            KC_TRNS ,KC_TRNS ,KC_DOT  ,KC_COMM ,     KC_NO   ,    KC_BSPC ,KC_TRNS ,        KC_NO   ,KC_NO   ,    KC_NO   ,     KC_TRNS ,KC_NO   ,KC_NO   , KC_TRNS
         //└────────┴────────┴────────┴────────┘    └────────┘   └────────┴────────┘       └────────┴────────┘   └────────┘    └────────┴────────┴────────┴────────┘
