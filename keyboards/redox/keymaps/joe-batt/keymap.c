@@ -6,10 +6,11 @@
  * edit it directly.
  */
 #define _BASE 0
-#define _GAME 1
-#define _FLIP 2
-#define _FAUDIO 3
-#define _RGBMOUSE 4
+#define _GAME 2
+#define _FLIP 3
+#define _FAUDIO 4
+#define _NEO 1
+#define _NEO_SYM 5
 
 typedef enum {
     TD_NONE,
@@ -35,60 +36,71 @@ enum {
 td_state_t cur_dance(qk_tap_dance_state_t *state);
 void custom_mod_tap(qk_tap_dance_state_t *state, uint16_t keycode);
 
-#define L3_RBRC LT(3, KC_RBRC)
-#define L2_ENT LT(2, KC_ENT)
+#define FA_RBRC LT(_FAUDIO, KC_RBRC)
+#define FL_ENT LT(_FLIP, KC_ENT)
 #define SF_GUI LSFT(KC_LGUI)
 #define SFT_BSP LSFT_T(KC_BSPC)
 #define CTL_TAB LCTL_T(KC_TAB)
 #define CPS_DEL TD(TD_CAPS_DEL)
 #define CPS_ENT TD(TD_CAPS_ENT)
 #define TD_MD TD(TD_MEDIA) 
+#define TT_GAME TT(_GAME)
+#define MO_FA MO(_FAUDIO)
+#define MO_SYM MO(_NEO_SYM)
+#define DF_BASE DF(_BASE)
+#define DF_NEO DF(_NEO)
 #define GUI_P LGUI(KC_V)
 #define GUI_6 LGUI(KC_6)
 #define GUI_7 LGUI(KC_7)
 #define GUI_8 LGUI(KC_8)
 #define GUI_9 LGUI(KC_9)
 #define GUI_0 LGUI(KC_0)
-#define SFT_7 LSFT(KC_7)
+#define SY_DEL LT(_NEO_SYM, KC_DEL)
+#define SY_ENT LT(_NEO_SYM, KC_ENT)
+
+
+#define SYM_BSL RALT(KC_MINS) 
+#define SYM_SLS LSFT(KC_7)
+#define SYM_LBC RALT(KC_7)
+#define SYM_RBC RALT(KC_0)
+#define SYM_LKL LSFT(KC_8)
+#define SYM_RKL LSFT(KC_9)
+#define SYM_PIP RALT(KC_NUBS)
+#define SYM_LBK RALT(KC_8)
+#define SYM_RBK RALT(KC_9)
+#define SYM_UNS LSFT(KC_SLSH)
+#define SYM_CLN LSFT(KC_DOT)
+#define SYM_SCL LSFT(KC_COMMA)
+#define SYM_CCF KC_GRV
+#define SYM_EXC LSFT(KC_1)
+#define SYM_LT  KC_NUBS
+#define SYM_GT  LSFT(KC_NUBS)
+#define SYM_EQ  LSFT(KC_0)
+#define SYM_AMP LSFT(KC_6)
+#define SYM_ATX LSFT(KC_RBRC)
+#define SYM_QST LSFT(KC_MINS)
+#define SYM_MIN KC_SLSH
+#define SYM_AT  RALT(KC_Q)
+#define SYM_HSH KC_NUHS
+#define SYM_DLR LSFT(KC_4)
+#define SYM_EUR RALT(KC_E)
+#define SYM_TLD RALT(KC_RBRC)
+#define SYM_PLS KC_RBRC
+#define SYM_BTK LSFT(KC_EQL)
+#define SYM_PRC LSFT(KC_5)
+#define SYM_DQT LSFT(KC_2)
+#define SYM_QT  LSFT(KC_NUHS)
 
 const uint16_t PROGMEM f12_combo[] = {KC_0, KC_9, COMBO_END};
-const uint16_t PROGMEM sft_ins_combo[] = {KC_V, KC_B, COMBO_END};
-const uint16_t PROGMEM sctl_v_combo[] = {KC_B, KC_C, KC_V, COMBO_END};
 const uint16_t PROGMEM alt_f4_combo[] = {KC_2, KC_3, KC_4, COMBO_END};
-const uint16_t PROGMEM ctrl_c_combo[] = {KC_R, KC_T, COMBO_END};
-const uint16_t PROGMEM ctrl_x_combo[] = {KC_G, KC_H, COMBO_END};
-const uint16_t PROGMEM sctl_c_combo[] = {KC_T, KC_E, KC_R, COMBO_END};
 const uint16_t PROGMEM gui_ent_combo[] = {KC_U, KC_I, COMBO_END};
 const uint16_t PROGMEM gui_tab_combo[] = {KC_M, KC_LBRC, COMBO_END};
 combo_t key_combos[COMBO_COUNT] = {
     COMBO(f12_combo, KC_F12),
-    COMBO(sft_ins_combo, LSFT(KC_INS)),
     COMBO(alt_f4_combo, LSG(KC_Q)),
-    COMBO(ctrl_x_combo, LCTL(KC_Q)),
-    COMBO(ctrl_c_combo, LCTL(KC_R)),
-    COMBO(sctl_c_combo, LCTL(LSFT(KC_R))),
-    COMBO(sctl_v_combo, LCTL(LSFT(KC_W))),
     COMBO(gui_ent_combo, LGUI(KC_ENT)),
     COMBO(gui_tab_combo, LGUI(KC_TAB)),
 };
-
-/*bool process_record_user(uint16_t keycode, keyrecord_t *record) {*/
-    /*switch (keycode) {*/
-
-    /*case KC_DEL:*/
-        /*if ( ((get_mods() & MOD_MASK_SHIFT) || (get_mods() & MOD_MASK_CTRL)) && !(get_mods() & MOD_MASK_ALT)) {*/
-            /*if (record->event.pressed) {*/
-                /*register_code(KC_INS);*/
-            /*} else {*/
-                /*unregister_code(KC_INS);*/
-            /*}*/
-        /*}*/
-        /*return false;*/
-
-    /*}*/
-    /*return true;*/
-/*};*/
-
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 	[_BASE] = LAYOUT(
@@ -99,9 +111,22 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         //├────────┼────────┼────────┼────────┼────────┼────────┼────────┤                         ├────────┼────────┼────────┼────────┼────────┼────────┼────────┤
            KC_CAPS ,KC_A    ,KC_S    ,KC_D    ,KC_F    ,KC_G    ,TD_MD   ,                          KC_VOLD ,KC_H    ,KC_J    ,KC_K    ,KC_L    ,KC_SCLN ,KC_NUHS ,
         //├────────┼────────┼────────┼────────┼────────┼────────┼────────┼────────┐       ┌────────┼────────┼────────┼────────┼────────┼────────┼────────┼────────┤
-           KC_LSFT ,KC_Z    ,KC_X    ,KC_C    ,KC_V    ,KC_B    ,MO(4)   ,GUI_P   ,        KC_PSCR ,MO(4)   ,KC_N    ,KC_M    ,KC_LBRC ,KC_QUOT ,KC_SLSH ,KC_RSFT ,
+           KC_LSFT ,KC_Z    ,KC_X    ,KC_C    ,KC_V    ,KC_B    ,DF_NEO   ,GUI_P   ,        KC_PSCR ,DF_NEO  ,KC_N    ,KC_M    ,KC_LBRC ,KC_QUOT ,KC_SLSH ,KC_RSFT ,
         //├────────┼────────┼────────┼────────┼────┬───┴────┬───┼────────┼────────┤       ├────────┼────────┼───┬────┴───┬────┼────────┼────────┼────────┼────────┤
-           MO(3)   ,KC_NUBS ,KC_LALT ,KC_LGUI ,     CTL_TAB ,    SFT_BSP ,CPS_DEL ,        CPS_ENT ,KC_SPC  ,    TT(1)   ,     KC_COMM ,KC_DOT  ,KC_RALT ,L3_RBRC
+           MO_FA   ,KC_NUBS ,KC_LALT ,KC_LGUI ,     CTL_TAB ,    SFT_BSP ,CPS_DEL ,        CPS_ENT ,KC_SPC  ,    TT_GAME ,     KC_COMM ,KC_DOT  ,KC_RALT ,FA_RBRC
+        //└────────┴────────┴────────┴────────┘    └────────┘   └────────┴────────┘       └────────┴────────┘   └────────┘    └────────┴────────┴────────┴────────┘
+           ),
+    [_NEO] = LAYOUT(
+        //┌────────┬────────┬────────┬────────┬────────┬────────┐                                           ┌────────┬────────┬────────┬────────┬────────┬────────┐
+           KC_GRV  ,KC_1    ,KC_2    ,KC_3    ,KC_4    ,KC_5    ,                                            KC_6    ,KC_7    ,KC_8    ,KC_9    ,KC_0    ,KC_MINS ,
+        //├────────┼────────┼────────┼────────┼────────┼────────┼────────┐                         ┌────────┼────────┼────────┼────────┼────────┼────────┼────────┤
+           KC_TAB  ,KC_X    ,KC_V    ,KC_L    ,KC_C    ,KC_W    ,KC_ESC  ,                          KC_VOLU ,KC_K    ,KC_H    ,KC_G    ,KC_F    ,KC_Q    ,KC_EQL  ,
+        //├────────┼────────┼────────┼────────┼────────┼────────┼────────┤                         ├────────┼────────┼────────┼────────┼────────┼────────┼────────┤
+           MO_SYM  ,KC_U    ,KC_I    ,KC_A    ,KC_E    ,KC_O    ,TD_MD   ,                          KC_VOLD ,KC_S    ,KC_N    ,KC_R    ,KC_T    ,KC_D    ,KC_NUHS ,
+        //├────────┼────────┼────────┼────────┼────────┼────────┼────────┼────────┐       ┌────────┼────────┼────────┼────────┼────────┼────────┼────────┼────────┤
+           KC_LSFT ,KC_LBRC ,KC_SCLN ,KC_QUOT ,KC_P    ,KC_Y    ,DF_BASE ,GUI_P   ,        KC_PSCR ,DF_BASE ,KC_B    ,KC_M    ,KC_MINS ,KC_Z    ,KC_J    ,KC_RSFT ,
+        //├────────┼────────┼────────┼────────┼────┬───┴────┬───┼────────┼────────┤       ├────────┼────────┼───┬────┴───┬────┼────────┼────────┼────────┼────────┤
+           MO_FA   ,KC_NUBS ,KC_LALT ,KC_LGUI ,     CTL_TAB ,    SFT_BSP ,SY_DEL  ,        SY_ENT  ,KC_SPC  ,    TT_GAME   ,     KC_COMM ,KC_DOT  ,KC_RALT ,FA_RBRC
         //└────────┴────────┴────────┴────────┘    └────────┘   └────────┴────────┘       └────────┴────────┘   └────────┘    └────────┴────────┴────────┴────────┘
            ),
     [_GAME] = LAYOUT(
@@ -114,7 +139,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         //├────────┼────────┼────────┼────────┼────────┼────────┼────────┼────────┐       ┌────────┼────────┼────────┼────────┼────────┼────────┼────────┼────────┤
            KC_TRNS ,KC_TRNS ,KC_TRNS ,KC_TRNS ,KC_TRNS ,KC_TRNS ,KC_TRNS ,KC_TRNS ,        KC_TRNS ,KC_TRNS ,KC_NO   ,KC_NO   ,KC_NO   ,KC_NO   ,KC_NO   ,KC_TRNS ,
         //├────────┼────────┼────────┼────────┼────┬───┴────┬───┼────────┼────────┤       ├────────┼────────┼───┬────┴───┬────┼────────┼────────┼────────┼────────┤
-           KC_TRNS ,KC_TRNS ,KC_TRNS ,KC_TRNS ,     KC_LCTL ,    KC_SPC  ,L2_ENT  ,        KC_TRNS ,KC_TRNS ,    KC_TRNS ,     KC_NO   ,KC_NO   ,KC_NO   ,KC_TRNS
+           KC_TRNS ,KC_TRNS ,KC_TRNS ,KC_TRNS ,     KC_LCTL ,    KC_SPC  ,FL_ENT  ,        KC_TRNS ,KC_TRNS ,    KC_TRNS ,     KC_NO   ,KC_NO   ,KC_NO   ,KC_TRNS
         //└────────┴────────┴────────┴────────┘    └────────┘   └────────┴────────┘       └────────┴────────┘   └────────┘    └────────┴────────┴────────┴────────┘
            ),
 	[_FLIP] = LAYOUT(
@@ -125,7 +150,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         //├────────┼────────┼────────┼────────┼────────┼────────┼────────┐                         ┌────────┼────────┼────────┼────────┼────────┼────────┼────────┤
            KC_NO   ,KC_SCLN ,KC_L    ,KC_K    ,KC_J    ,KC_H    ,KC_F9   ,                          KC_TRNS ,KC_NO   ,KC_NO   ,KC_NO   ,KC_NO   ,KC_NO   ,KC_NO   , 
         //├────────┼────────┼────────┼────────┼────────┼────────┼────────┼────────┐       ┌────────┼────────┼────────┼────────┼────────┼────────┼────────┼────────┤
-           KC_LSFT ,KC_SLSH ,KC_QUOT ,KC_LBRC ,KC_M    ,KC_N    ,KC_TRNS ,SFT_7   ,        KC_NO   ,KC_TRNS ,KC_NO   ,KC_NO   ,KC_NO   ,KC_NO   ,KC_NO   ,KC_NO   , 
+           KC_LSFT ,KC_SLSH ,KC_QUOT ,KC_LBRC ,KC_M    ,KC_N    ,KC_TRNS ,SYM_SLS   ,        KC_NO   ,KC_TRNS ,KC_NO   ,KC_NO   ,KC_NO   ,KC_NO   ,KC_NO   ,KC_NO   , 
         //├────────┼────────┼────────┼────────┼────┬───┴────┬───┼────────┼────────┤       ├────────┼────────┼───┬────┴───┬────┼────────┼────────┼────────┼────────┤
            KC_TRNS ,KC_TRNS ,KC_DOT  ,KC_COMM ,     KC_NO   ,    KC_BSPC ,KC_TRNS ,        KC_NO   ,KC_NO   ,    KC_NO   ,     KC_TRNS ,KC_NO   ,KC_NO   , KC_TRNS
         //└────────┴────────┴────────┴────────┘    └────────┘   └────────┴────────┘       └────────┴────────┘   └────────┘    └────────┴────────┴────────┴────────┘
@@ -143,17 +168,18 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
            KC_TRNS ,KC_TRNS ,KC_TRNS ,KC_RGUI ,     KC_RCTL ,    DM_REC1 ,DM_PLY1 ,        KC_NO   ,KC_NO   ,    KC_NO   ,     KC_COMM ,KC_DOT  ,KC_PSLS ,KC_TRNS
         //└────────┴────────┴────────┴────────┘    └────────┘   └────────┴────────┘       └────────┴────────┘   └────────┘    └────────┴────────┴────────┴────────┘
            ),
-    [_RGBMOUSE] = LAYOUT(
+
+    [_NEO_SYM] = LAYOUT(
         //┌────────┬────────┬────────┬────────┬────────┬────────┐                                           ┌────────┬────────┬────────┬────────┬────────┬────────┐
-           RGB_SAI ,KC_NO   ,KC_NO   ,KC_NO   ,KC_NO   ,KC_NO   ,                                            KC_NO   ,KC_ACL0 ,KC_ACL1 ,KC_ACL2 ,KC_NO   ,KC_NO   ,
+           KC_GRV  ,KC_1    ,KC_2    ,KC_3    ,KC_4    ,KC_5    ,                                            KC_6    ,KC_7    ,KC_8    ,KC_9    ,KC_0    ,KC_MINS ,
         //├────────┼────────┼────────┼────────┼────────┼────────┼────────┐                         ┌────────┼────────┼────────┼────────┼────────┼────────┼────────┤
-           RGB_SAD ,RGB_M_X ,RGB_M_K ,RGB_M_R ,RGB_M_SW,RGB_TOG ,RGB_VAI ,                          KC_NO   ,KC_NO   ,KC_WH_L ,KC_MS_U ,KC_WH_R ,KC_NO   ,KC_NO   ,
-        //├────────┼────────┼────────┼────────┼────────┼────────┼────────┐                         ┌────────┼────────┼────────┼────────┼────────┼────────┼────────┤
-           RGB_HUI ,RGB_M_B ,RGB_M_G ,RGB_M_P ,RGB_SPD ,RGB_SPI ,RGB_VAD ,                          KC_NO   ,KC_NO   ,KC_MS_L ,KC_MS_D ,KC_MS_R ,KC_NO   ,KC_NO   ,
+           KC_TAB  ,SYM_EUR ,SYM_UNS ,SYM_LBK ,SYM_RBK ,SYM_CCF ,KC_ESC  ,                          KC_VOLU ,SYM_EXC ,SYM_LT  ,SYM_GT  ,SYM_EQ  ,SYM_AMP ,KC_EQL  ,
+        //├────────┼────────┼────────┼────────┼────────┼────────┼────────┤                         ├────────┼────────┼────────┼────────┼────────┼────────┼────────┤
+           KC_TRNS ,SYM_BSL ,SYM_SLS ,SYM_LBC ,SYM_RBC ,SYM_ATX ,TD_MD   ,                          KC_VOLD ,SYM_QST ,SYM_LKL ,SYM_RKL ,SYM_MIN ,SYM_CLN ,KC_NUHS ,
         //├────────┼────────┼────────┼────────┼────────┼────────┼────────┼────────┐       ┌────────┼────────┼────────┼────────┼────────┼────────┼────────┼────────┤
-           RGB_HUD ,KC_NO   ,KC_NO   ,KC_NO   ,KC_NO   ,KC_NO   ,KC_TRNS ,KC_NO   ,        KC_NO   ,KC_TRNS ,KC_NO   ,KC_NO   ,KC_NO   ,KC_NO   ,KC_NO   ,KC_NO   ,
+           KC_LSFT ,SYM_HSH ,SYM_DLR ,SYM_PIP ,SYM_TLD ,SYM_BTK ,KC_TRNS ,GUI_P   ,        KC_PSCR ,KC_TRNS ,SYM_PLS ,SYM_PRC ,KC_MINS ,SYM_AT  ,SYM_SCL ,KC_RSFT ,
         //├────────┼────────┼────────┼────────┼────┬───┴────┬───┼────────┼────────┤       ├────────┼────────┼───┬────┴───┬────┼────────┼────────┼────────┼────────┤
-           KC_TRNS ,KC_NO   ,KC_NO   ,KC_TRNS ,     KC_ACL0 ,    KC_ACL1 ,KC_ACL2 ,        KC_BTN3 ,KC_BTN1 ,    KC_BTN2 ,     KC_NO   ,KC_NO   ,KC_NO   ,KC_NO
+           KC_TRNS ,KC_NUBS ,KC_LALT ,KC_LGUI ,     CTL_TAB ,    SFT_BSP ,KC_DEL ,         KC_ENT ,KC_SPC  ,    KC_TRNS   ,    SYM_DQT ,SYM_QT  ,KC_RALT ,FA_RBRC
         //└────────┴────────┴────────┴────────┘    └────────┘   └────────┴────────┘       └────────┴────────┘   └────────┘    └────────┴────────┴────────┴────────┘
            )
 };
@@ -180,6 +206,10 @@ const rgblight_segment_t PROGMEM my_faudio_layer[] = RGBLIGHT_LAYER_SEGMENTS(
     {0, 14, HSV_SPRINGGREEN}
 );
 
+const rgblight_segment_t PROGMEM my_neo_layer[] = RGBLIGHT_LAYER_SEGMENTS(
+    {0, 14, HSV_GREEN}
+);
+
 const rgblight_segment_t PROGMEM my_record_end_layer[] = RGBLIGHT_LAYER_SEGMENTS(
     {0, 14, HSV_WHITE}
 );
@@ -195,17 +225,16 @@ const rgblight_segment_t* const PROGMEM my_rgb_layers[] = RGBLIGHT_LAYERS_LIST(
     my_faudio_layer,
     my_flip_layer,
     my_record_start_layer,
-    my_record_end_layer
+    my_record_end_layer,
+    my_neo_layer
 );
 
 void dynamic_macro_record_start_user(void) {
-    /*rgblight_set_layer_state(5, true);*/
     rgblight_blink_layer_repeat(5, 300, 2);
 }
 
 void dynamic_macro_record_end_user(int8_t direction) {
     rgblight_blink_layer_repeat(6, 300, 2);
-    /*rgblight_set_layer_state(5, false);*/
 }
 
 
@@ -219,10 +248,21 @@ bool led_update_user(led_t led_state) {
     rgblight_set_layer_state(2, led_state.num_lock); 
     return true;
 }
+
+layer_state_t default_layer_state_set_user(layer_state_t state){
+    if (IS_LAYER_ON_STATE(state, _NEO)) { 
+        rgblight_mode_noeeprom(RGBLIGHT_MODE_BREATHING);
+    } else if (IS_LAYER_ON_STATE(state, _BASE)) {
+        rgblight_mode_noeeprom(RGBLIGHT_MODE_RAINBOW_SWIRL); 
+    }
+    return state;
+}
+
 layer_state_t layer_state_set_user(layer_state_t state) {
     rgblight_set_layer_state(0, layer_state_cmp(state, _GAME));    
     rgblight_set_layer_state(3, layer_state_cmp(state, _FAUDIO));    
-    rgblight_set_layer_state(4, layer_state_cmp(state, _FLIP));    
+    rgblight_set_layer_state(4, layer_state_cmp(state, _FLIP));
+    rgblight_set_layer_state(7, layer_state_cmp(state, _NEO_SYM));
     return state;
 };
 
@@ -303,7 +343,13 @@ void custom_mod_finished(td_tap_t tap_state, uint16_t modcode, uint16_t keycode)
 
 void del_finished(qk_tap_dance_state_t *state, void *user_data) {
     deltap_state.state = cur_dance(state);
-    custom_mod_finished(deltap_state, KC_CAPS, KC_DEL);
+    // Send INS in combination with Shift or CTRL unless ALT is active
+    if ( ((get_mods() & MOD_MASK_SHIFT) || (get_mods() & MOD_MASK_CTRL)) && !(get_mods() & MOD_MASK_ALT)) {
+        custom_mod_finished(deltap_state, KC_CAPS, KC_INS);
+    }
+    else {
+        custom_mod_finished(deltap_state, KC_CAPS, KC_DEL);
+    }
 }
 
 void custom_mod_reset(td_tap_t tap_state, uint16_t modcode, uint16_t keycode){
@@ -318,7 +364,12 @@ void custom_mod_reset(td_tap_t tap_state, uint16_t modcode, uint16_t keycode){
 }
 
 void del_reset(qk_tap_dance_state_t *state, void *user_data) {
-    custom_mod_reset(deltap_state, KC_CAPS, KC_DEL);
+    // Send INS in combination with Shift or CTRL unless ALT is active
+    if ( ((get_mods() & MOD_MASK_SHIFT) || (get_mods() & MOD_MASK_CTRL)) && !(get_mods() & MOD_MASK_ALT)) {
+        custom_mod_reset(deltap_state, KC_CAPS, KC_INS);
+    } else {
+        custom_mod_reset(deltap_state, KC_CAPS, KC_DEL);
+    }
 }
 
 void ent_finished(qk_tap_dance_state_t *state, void *user_data) {
