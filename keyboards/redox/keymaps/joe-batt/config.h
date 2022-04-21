@@ -41,7 +41,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define RGBLIGHT_SAT_STEP 8
 #define RGBLIGHT_VAL_STEP 8
 #define RGBLIGHT_LAYERS
-#define COMBO_COUNT 9
+#define COMBO_COUNT 4
 //#define IGNORE_MOD_TAP_INTERRUPT
 #define PERMISSIVE_HOLD
 //#define HOLD_ON_OTHER_KEY_PRESS_PER_KEY
@@ -59,10 +59,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //#define MK_C_OFFSET_2 16
 //#define MK_C_INTERVAL_2 16
 //
-#define MK_KINETIC_SPEED
+//#define MK_KINETIC_SPEED
 #define RGBLIGHT_LAYER_BLINK
-#define MOUSEKEY_INTERVAL 8
-#define MOUSEKEY_MOVE_DELTA 1
-#define MOUSEKEY_INITIAL_SPEED 2
-#define MOUSEKEY_BASE_SPEED 32
+//#define MOUSEKEY_INTERVAL 8
+//#define MOUSEKEY_MOVE_DELTA 1
+//#define MOUSEKEY_INITIAL_SPEED 2
+//#define MOUSEKEY_BASE_SPEED 32
 #define USB_POLLING_INTERVAL_MS 2
