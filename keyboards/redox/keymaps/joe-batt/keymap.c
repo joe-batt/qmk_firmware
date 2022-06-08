@@ -131,7 +131,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
            ),
     [_GAME] = LAYOUT(
         //┌────────┬────────┬────────┬────────┬────────┬────────┐                                           ┌────────┬────────┬────────┬────────┬────────┬────────┐
-           KC_TRNS ,KC_TRNS ,KC_TRNS ,KC_TRNS ,KC_TRNS ,KC_TRNS ,                                            GUI_6   ,GUI_7   ,GUI_8   ,GUI_9   ,GUI_0   ,KC_NO   ,
+           KC_TRNS ,KC_TRNS ,KC_TRNS ,KC_TRNS ,KC_TRNS ,KC_TRNS ,                                            GUI_6   ,GUI_7   ,GUI_8   ,GUI_9   ,GUI_0   ,RGB_TOG ,
         //├────────┼────────┼────────┼────────┼────────┼────────┼────────┐                         ┌────────┼────────┼────────┼────────┼────────┼────────┼────────┤
            KC_TRNS ,KC_TRNS ,KC_TRNS ,KC_TRNS ,KC_TRNS ,KC_TRNS ,KC_TRNS ,                          KC_TRNS ,KC_NO   ,KC_PGUP ,KC_UP   ,KC_PGDN ,KC_NO   ,KC_NO   ,
         //├────────┼────────┼────────┼────────┼────────┼────────┼────────┤                         ├────────┼────────┼────────┼────────┼────────┼────────┼────────┤
